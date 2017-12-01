@@ -6,7 +6,7 @@ SRCDIR=src
 OBJDIR=obj
 
 # add all source files below
-SRC=
+SRC=tuple.c node.c
 OBJ=$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 # add all test source files below
