@@ -1,6 +1,6 @@
 C=cc
-CFLAGS= -std=c99 -Wall -Wextra -pedantic -g -Werror -O2
-LDFLAGS=-g -O2
+CFLAGS=-std=c99 -Wall -Wextra -pedantic -g -Werror -D DEBUG # -O2
+LDFLAGS=-g # -O2
 
 SRCDIR=src
 OBJDIR=obj
