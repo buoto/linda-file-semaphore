@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=-std=c99 -Wall -Wextra -pedantic -g -Werror -D DEBUG -O2
+CFLAGS=-std=c99 -Wall -Wextra -pedantic -g -D DEBUG -O2 # -Werror
 LDFLAGS=-g -O2
 
 OBJ_DIR=build
@@ -8,7 +8,7 @@ EXEC=linda
 LIB=linda
 LIB_FILE=$(OBJ_DIR)/lib$(LIB).a
 
-SRC=tuple.c node.c
+SRC=tuple.c node.c linda.c
 SRC_MAIN=main.c
 SRC_DIR=src
 SRC_OBJ_DIR=$(OBJ_DIR)/obj
