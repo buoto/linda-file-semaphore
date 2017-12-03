@@ -1,4 +1,9 @@
+#include <check.h>
+#include <stdlib.h>
+
+//  test files:
 #include "node_tests.h"
+//  ----------
 
 int main(void)
 {
