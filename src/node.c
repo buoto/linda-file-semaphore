@@ -1,22 +1,22 @@
 #include "node.h"
 
-struct node make_string_node(const char* string, int size) {
+node make_string_node(const char* string, int size) {
     char* value = (char*) malloc(sizeof(char) * size);
     strncpy(value, string, size);
-    return (struct node) {
+    return (node) {
         .type = STRING,
         .value = value,
     };
 }
 
-struct node make_int_node(long long integer) {
-    return (struct node) {
+node make_int_node(long long integer) {
+    return (node) {
         .type = INTEGER,
         .value = (void*) integer,
     };
 }
 
-void destroy_node(struct node* node) {
+void destroy_node(node* node) {
     if (node == NULL) {
         return;
     }
@@ -27,7 +27,7 @@ void destroy_node(struct node* node) {
     node->value = NULL;
 }
 
-void print_node(struct node node) {
+void print_node(node node) {
     switch (node.type) {
         case INTEGER:
             printf("%llu\n", (long long) node.value);

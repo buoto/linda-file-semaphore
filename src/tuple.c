@@ -1,12 +1,12 @@
 #include "tuple.h"
 
-struct tuple make_tuple() {
-    return (struct tuple) {
+tuple make_tuple() {
+    return (tuple) {
         .size = 0
     };
 }
 
-int tuple_append(struct tuple *t, struct node node) {
+int tuple_append(tuple *t, node node) {
     if (t == NULL) {
         return -1;
     }

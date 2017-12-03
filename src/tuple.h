@@ -7,12 +7,12 @@
 #define TUPLE_MAX_SIZE 5
 #endif
 
-struct tuple {
+typedef struct {
     size_t size;
-    struct node elems[TUPLE_MAX_SIZE];
-};
+    node elems[TUPLE_MAX_SIZE];
+} tuple;
 
-extern struct tuple make_tuple();
-extern int tuple_append(struct tuple *t, struct node node);
+extern tuple make_tuple();
+extern int tuple_append(tuple *t, node node);
 
 #endif /* end of include guard: TUPLE_H */
