@@ -5,12 +5,12 @@
 #include <string.h>
 #include <stdio.h>
 
-
-
 enum node_type { INTEGER, STRING };
+enum node_matcher { NONE, LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, ANY };
 
 struct node {
     enum node_type type;
+    enum node_matcher matcher;
     void* value;
 };
 

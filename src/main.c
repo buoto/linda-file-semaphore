@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <check.h>
 
 #include "tuple.h"
+
 
 int main() {
     int integer = 123;
