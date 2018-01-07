@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include "linda.h"
 
-void linda_output(const tuple* value) {
+void linda_output(const struct tuple* value) {
     printf("linda_output: not implemented/n");
     exit(1);
 }
 
-int linda_input(const tuple* pattern, tuple* output, unsigned timeout_ms) {
+int linda_input(const struct tuple* pattern, struct tuple* output, unsigned timeout_ms) {
     printf("linda_input: not implemented/n");
     exit(1);
 }
 
-int linda_read(const tuple* pattern, tuple* output, unsigned timeout_ms) {
+int linda_read(const struct tuple* pattern, struct tuple* output, unsigned timeout_ms) {
     printf("linda_read: not implemented/n");
     exit(1);
 }
