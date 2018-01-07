@@ -26,6 +26,26 @@ START_TEST(node_destroy_string)
 }
 END_TEST
 
+struct match_node_case {
+    const char *pattern;
+    const char *value;
+    int expected;
+} match_node_cases[] = {
+    { "\"abc\"", "\"abc\"", 1 },
+};
+const int N_NODE_CASES = sizeof(match_node_cases) / sizeof(struct match_node_case);
+
+START_TEST(node_match_node)
+{
+    struct node pattern, value;
+    parse_node(&pattern, 0, match_node_cases[_i].pattern);
+    parse_node(&value, 0, match_node_cases[_i].value);
+
+    int result = match_node(&pattern, &value);
+    ck_assert_int_eq(result, match_node_cases[_i].expected);
+}
+END_TEST
+
 struct match_pattern_case {
     const char *pattern;
     const char *value;
