@@ -19,6 +19,6 @@ struct node make_int_node(long long integer);
 void destroy_node(struct node *node);
 void print_node(struct node node);
 
-int pattern_matches(const char *pattern, const char *string);
+int pattern_matches(const char *pattern, const char *value);
 
 #endif /* end of include guard: NODE_H */

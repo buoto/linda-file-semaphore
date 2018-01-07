@@ -38,7 +38,7 @@ void print_node(struct node node) {
     }
 }
 
-int pattern_matches(const char *pattern, const char *string) {
+int pattern_matches(const char *pattern, const char *value) {
     return 1;
 }
 
