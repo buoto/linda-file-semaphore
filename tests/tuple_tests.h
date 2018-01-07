@@ -17,7 +17,7 @@ START_TEST(tuple_append_one)
     int ret = tuple_append(&t, n);
     ck_assert_int_eq(ret, 0);
     ck_assert_int_eq(t.size, 1);
-    ck_assert_int_eq((int)t.elems[0].value, 5);
+    ck_assert_int_eq(t.elems[0].int_value, 5);
 }
 END_TEST
 
@@ -30,6 +30,6 @@ START_TEST(tuple_max_size)
         tuple_append(&t, n);
     ck_assert_int_eq(tuple_append(&t, n), -1);
     ck_assert_int_eq(t.size, 5);
-    ck_assert_str_eq((char*)t.elems[4].value, "ff");
+    ck_assert_str_eq(t.elems[4].str_value, "ff");
 }
 END_TEST

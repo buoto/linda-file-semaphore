@@ -11,11 +11,12 @@ enum node_matcher { NONE, LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQ
 struct node {
     enum node_type type;
     enum node_matcher matcher;
-    void* value;
+    char *str_value;
+    unsigned int_value;
 };
 
-struct node make_string_node(const char *string, int size);
-struct node make_int_node(long long integer);
+struct node make_string_node(const char *string, unsigned size);
+struct node make_int_node(unsigned integer);
 void destroy_node(struct node *node);
 void print_node(struct node node);
 

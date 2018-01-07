@@ -20,7 +20,6 @@ int main(void)
     tcase_add_test(tc, node_make_int);
     tcase_add_test(tc, node_make_string);
     tcase_add_test(tc, node_destroy_string);
-    tcase_add_test(tc, node_destroy_int);
     tcase_add_loop_test(tc, node_match_pattern, 0, N_PATTERN_CASES);
 
     tcase_add_test(tc, tuple_make);
