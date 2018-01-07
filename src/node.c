@@ -30,7 +30,7 @@ void destroy_node(struct node* node) {
 void print_node(struct node node) {
     switch (node.type) {
         case INTEGER:
-            printf("%llu\n", node.int_value);
+            printf("%u\n", node.int_value);
             return;
         case STRING:
             printf("%s\n", node.str_value);
