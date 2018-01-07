@@ -40,8 +40,18 @@ struct pattern_matches_case {
     int expected;
 } pattern_matches_cases[] = {
     { "", "", 1 },
+    { "abc", "", 0 },
+    { "", "abc", 0 },
     { "abc", "abc", 1 },
+    { "abc", "de", 0 },
     { "*", "abc", 1 },
+    { "a*", "abc", 1 },
+    { "*c", "abc", 1 },
+    { "ab*c", "abc", 1 },
+    { "a*d*g", "abcdefg", 1 },
+    { "*x", "abc", 0 },
+    { "a*x", "abc", 0 },
+    { "a*d*x", "abcdef", 0 },
 };
 const int N_PATTERN_CASES = sizeof(pattern_matches_cases) / sizeof(struct pattern_matches_case);
 
