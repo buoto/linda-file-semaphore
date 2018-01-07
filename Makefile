@@ -16,7 +16,7 @@ OBJ_MAIN=$(OBJDIR)/main.o
 
 .PHONY: all clean run debug test
 
-all: $(EXEC)
+all: build
 
 run: $(EXEC)
 	./$(EXEC)
@@ -24,7 +24,7 @@ run: $(EXEC)
 debug: $(EXEC)
 	gdb $(EXEC)
 
-$(EXEC): $(OBJDIR) $(OBJ_MAIN) $(OBJ)
+build: $(OBJDIR) $(OBJ_MAIN) $(OBJ) $(SRCHEADERS)
 	$(CC) $(LDFLAGS) -o $(EXEC) $(OBJ_MAIN) $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
@@ -35,10 +35,10 @@ $(OBJDIR):
 
 TEST_OBJ=$(OBJDIR)/tests_main.o
 
-test: $(TESTEXEC)
+test: build_test
 	./$(TESTEXEC)
 
-$(TESTEXEC): $(OBJDIR) $(TEST_OBJ) $(OBJ)
+build_test: $(OBJDIR) $(TEST_OBJ) $(OBJ)
 	$(CC) $(LDFLAGS) -o $(TESTEXEC) $(TEST_OBJ) $(OBJ) $(TESTFLAGS)
 
 $(OBJDIR)/%.o: $(TESTDIR)/%.c
