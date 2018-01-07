@@ -52,6 +52,10 @@ struct match_pattern_case {
     { "*x", "abc", 0 },
     { "a*x", "abc", 0 },
     { "a*d*x", "abcdef", 0 },
+    { "a**c", "axxxxxxxc", 1 },
+    { "a**c", "axxxxxxxx", 0 },
+    { "*a*", "xxxxaxxx", 1 },
+    { "*a*", "xxxxxxxx", 0 },
 };
 const int N_PATTERN_CASES = sizeof(match_pattern_cases) / sizeof(struct match_pattern_case);
 
