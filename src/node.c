@@ -39,7 +39,7 @@ void print_node(struct node node) {
 }
 
 #define WILDCARD '*'
-int pattern_matches(const char *pattern, const char *value) {
+int match_pattern(const char *pattern, const char *value) {
     unsigned pattern_index = 0;
     unsigned value_index = 0;
 
@@ -51,7 +51,7 @@ int pattern_matches(const char *pattern, const char *value) {
             case 0:
                 return value_char == 0;
             case WILDCARD:
-                if(pattern_matches(
+                if(match_pattern(
                     &pattern[pattern_index+1],
                     &value[value_index]
                 )) {

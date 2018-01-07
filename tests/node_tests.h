@@ -34,11 +34,11 @@ START_TEST(node_destroy_int)
 }
 END_TEST
 
-struct pattern_matches_case {
+struct match_pattern_case {
     const char *pattern;
     const char *value;
     int expected;
-} pattern_matches_cases[] = {
+} match_pattern_cases[] = {
     { "", "", 1 },
     { "abc", "", 0 },
     { "", "abc", 0 },
@@ -53,14 +53,14 @@ struct pattern_matches_case {
     { "a*x", "abc", 0 },
     { "a*d*x", "abcdef", 0 },
 };
-const int N_PATTERN_CASES = sizeof(pattern_matches_cases) / sizeof(struct pattern_matches_case);
+const int N_PATTERN_CASES = sizeof(match_pattern_cases) / sizeof(struct match_pattern_case);
 
-START_TEST(node_pattern_matches)
+START_TEST(node_match_pattern)
 {
-    int result = pattern_matches(
-        pattern_matches_cases[_i].pattern,
-        pattern_matches_cases[_i].value
+    int result = match_pattern(
+        match_pattern_cases[_i].pattern,
+        match_pattern_cases[_i].value
     );
-    ck_assert_int_eq(result, pattern_matches_cases[_i].expected);
+    ck_assert_int_eq(result, match_pattern_cases[_i].expected);
 }
 END_TEST
