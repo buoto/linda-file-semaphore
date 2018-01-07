@@ -6,6 +6,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define NODE_I(V) { .type = INTEGER, .int_value = V, .matcher = EQUAL }
+#define NODE_IM(V, M) { .type = INTEGER, .int_value = V, .matcher = M }
+#define NODE_S(V) { .type = STRING, .str_value = V, .matcher = EQUAL }
+#define NODE_SM(V, M) { .type = STRING, .str_value = V, .matcher = M }
+
 enum node_type { INTEGER, STRING };
 enum node_matcher { NONE, LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, ANY };
 

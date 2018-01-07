@@ -14,5 +14,9 @@ struct tuple {
 
 extern struct tuple make_tuple();
 extern int tuple_append(struct tuple *t, struct node node);
+bool match_tuple(
+    const struct tuple *pattern,
+    const struct tuple *value
+);
 
 #endif /* end of include guard: TUPLE_H */

@@ -33,3 +33,27 @@ START_TEST(tuple_max_size)
     ck_assert_str_eq(t.elems[4].str_value, "ff");
 }
 END_TEST
+
+
+struct match_tuple_case {
+    struct tuple pattern;
+    struct tuple value;
+    int expected;
+} match_tuple_cases[] = {
+    {
+        { 3, { NODE_I(1), NODE_I(2), NODE_I(3) } },
+        { 3, { NODE_I(1), NODE_I(2), NODE_I(3) } },
+        true
+    }
+};
+const int N_TUPLE_CASES = sizeof(match_tuple_cases) / sizeof(struct match_tuple_case);
+
+START_TEST(tuple_match_tuple)
+{
+    int result = match_tuple(
+        &match_tuple_cases[_i].pattern,
+        &match_tuple_cases[_i].value
+    );
+    ck_assert_int_eq(result, match_tuple_cases[_i].expected);
+}
+END_TEST

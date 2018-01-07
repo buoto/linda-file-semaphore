@@ -18,3 +18,9 @@ int tuple_append(struct tuple *t, struct node node) {
     return 0;
 }
 
+bool match_tuple(
+    const struct tuple *pattern,
+    const struct tuple *value
+) {
+    return true;
+}

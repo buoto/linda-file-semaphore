@@ -26,11 +26,6 @@ START_TEST(node_destroy_string)
 }
 END_TEST
 
-#define NODE_I(V) { .type = INTEGER, .int_value = V, .matcher = EQUAL }
-#define NODE_IM(V, M) { .type = INTEGER, .int_value = V, .matcher = M }
-#define NODE_S(V) { .type = STRING, .str_value = V, .matcher = EQUAL }
-#define NODE_SM(V, M) { .type = STRING, .str_value = V, .matcher = M }
-
 struct match_node_case {
     struct node pattern;
     struct node value;
