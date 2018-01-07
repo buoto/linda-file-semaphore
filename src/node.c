@@ -38,7 +38,39 @@ void print_node(struct node node) {
     }
 }
 
+#define WILDCARD '*'
 int pattern_matches(const char *pattern, const char *value) {
-    return 1;
+    unsigned pattern_index = 0;
+    unsigned value_index = 0;
+
+    while(1) {
+        char pattern_char = pattern[pattern_index];
+        char value_char = value[value_index];
+
+        switch(pattern_char) {
+            case 0:
+                return value_char == 0;
+            case WILDCARD:
+                if(pattern_matches(
+                    &pattern[pattern_index+1],
+                    &value[value_index]
+                )) {
+                    return 1;
+                } else {
+                    value_index++;
+                    break;
+                }
+            default:
+                if(pattern_char != value_char) {
+                    return 0;
+                }
+                pattern_index++;
+                value_index++;
+        }
+
+        if(value_char == 0) {
+            return 0;
+        }
+    }
 }
 
