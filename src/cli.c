@@ -13,7 +13,21 @@ void cli_start() {
             printf("%s\n", result.error);
             continue;
         }
+
+        run_command(&result);
     }
 
     free(line);
+}
+
+void run_command(struct parse_result* result) {
+    switch(result->operation) {
+        case INPUT:
+            run_input_command(&result->tuple, result->timeout_ms);
+    }
+}
+
+void run_input_command(struct tuple* tuple, unsigned timeout_ms) {
+    struct tuple result;
+    int error = linda_input(tuple, &result, timeout_ms);
 }
