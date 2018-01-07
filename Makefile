@@ -14,8 +14,6 @@ SRC=tuple.c node.c linda.c cli.c parser.c
 OBJ=$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 MAINOBJ=$(OBJDIR)/main.o
 
-$(MAINOBJ): FORCE
-
 .PHONY: all clean run debug test FORCE
 
 all: $(EXEC)
@@ -31,6 +29,8 @@ $(EXEC): $(OBJDIR) $(MAINOBJ) $(OBJ) $(SRCHEADERS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
+
+$(MAINOBJ): FORCE
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
