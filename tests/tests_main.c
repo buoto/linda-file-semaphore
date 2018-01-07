@@ -26,7 +26,9 @@ int main(void)
     tcase_add_test(tc, tuple_append_one);
     tcase_add_test(tc, tuple_max_size);
 
-    tcase_add_test(tc, parser_init);
+    tcase_add_test(tc, parser_wrong);
+    tcase_add_test(tc, parser_empty);
+    tcase_add_test(tc, parser_bracket_error);
     //  -----
 
     srunner_run_all(sr, CK_ENV);

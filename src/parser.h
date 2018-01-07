@@ -9,7 +9,7 @@ struct parse_result {
     enum operation operation;
     struct tuple tuple;
     unsigned timeout_ms;
-    char* error;
+    unsigned error;
 };
 
 struct parse_result parse(char* user_input);
