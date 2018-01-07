@@ -8,7 +8,7 @@ enum operation { INPUT, OUTPUT, READ };
 struct parse_result {
     enum operation operation;
     struct tuple tuple;
-    int timeout_ms; // if -1 infinite timeout
+    unsigned timeout_ms;
     char* error;
 };
 
