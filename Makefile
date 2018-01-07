@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-std=c99 -Wall -Wextra -pedantic -g -D DEBUG -O2 # -Werror
 LDFLAGS=-g -O2
-TESTFLAGS=-lcheck -lcheck_pic -pthread -lrt -lm -lsubunit
+TESTFLAGS=-lcheck -pthread -lrt -lm -lsubunit
 
 SRCDIR=src
 OBJDIR=obj
