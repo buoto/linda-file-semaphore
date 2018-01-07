@@ -33,6 +33,9 @@ int main(void)
     tcase_add_test(tc, parser_node_2);
     tcase_add_test(tc, parser_single_tuple_1);
     tcase_add_test(tc, parser_single_tuple_2);
+    tcase_add_test(tc, parser_multiple_tuples_1);
+    tcase_add_test(tc, parser_multiple_tuples_2);
+    tcase_add_test(tc, parser_too_many_tuples);
     //  -----
 
     srunner_run_all(sr, CK_ENV);

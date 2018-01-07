@@ -1,11 +1,16 @@
 #include "parser.h"
 
-void whitespaces(int *iter, char* str)
-{
+void whitespaces(int *iter, char* str) {
     while(str[*iter] == ' ') {
         (*iter)++;
-        continue;
     }
+}
+
+void print_error(int iter, char* str) {
+    printf("error: %s\n      ", str);
+    for(int i = 0; i < iter; i++)
+        printf(" ");
+    printf("^\n");
 }
 
 int parse_node(struct node *n, int *iter, char *str) {
@@ -58,6 +63,7 @@ int parse_node(struct node *n, int *iter, char *str) {
 
         n->str_value = (char*)malloc(i);
         strncpy(n->str_value, str + *iter - i, i);
+        (*iter)++;
     } else if(str[*iter] == '*') {
         //any integer
         (*iter)++;
@@ -93,7 +99,8 @@ struct parse_result parse(char* str) {
             break;
     }
 
-    if(strncmp(str, word, strlen(word)) != 0) {
+    if(strncmp(str + iter, word, strlen(word)) != 0) {
+        print_error(iter, str);
         res.error = iter + 1;
         return res;
     }
@@ -102,19 +109,21 @@ struct parse_result parse(char* str) {
     whitespaces(&iter, str);
     // left bracket (
     if(str[iter++] != '(') {
+        print_error(iter, str);
         res.error = iter;
         return res;
     }
 
-    whitespaces(&iter, str);
     //tuples
     res.tuple = make_tuple();
     struct node n;
     int i = 0;
+    while (str[iter] != ')') {
+        whitespaces(&iter, str);
 
-    while (i < 5 && str[iter] != ')') {
-        // tuple
+        // node
         if(parse_node(&n, &iter, str) != 0) {
+            print_error(iter, str);
             res.error = iter + 1;
             return res;
         }
@@ -122,16 +131,16 @@ struct parse_result parse(char* str) {
         tuple_append(&res.tuple, n);
         whitespaces(&iter, str);
         //comma
-        if(str[iter] != ',') {
+        if(i == 4 || str[iter] != ',') {
             break;
         }
-
+        i++;
+        iter++;
     }
-    //print_node(res.tuple.elems[0]);
-    whitespaces(&iter, str);
 
     // right bracket )
     if(str[iter++] != ')') {
+        print_error(iter, str);
         res.error = iter;
         return res;
     }
@@ -147,14 +156,17 @@ struct parse_result parse(char* str) {
             iter++;
         }
     } else {
+        print_error(iter, str);
         res.error = iter + 1;
         return res;
     }
 
     whitespaces(&iter, str);
+
     if(str[iter] == '\0') {
         res.error = 0;
     } else {
+        print_error(iter, str);
         res.error = iter + 1;
     }
     return res;
