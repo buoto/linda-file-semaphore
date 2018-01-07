@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "linda.h"
 
-void linda_output(const struct tuple* value) {
+int linda_output(const struct tuple* value) {
     printf("linda_output: not implemented/n");
     exit(1);
 }

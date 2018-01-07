@@ -3,7 +3,7 @@
 
 #include "tuple.h"
 
-void linda_output(const struct tuple* value);
+int linda_output(const struct tuple* value);
 int linda_input(const struct tuple* pattern, struct tuple* output, unsigned timeout_ms);
 int linda_read(const struct tuple* pattern, struct tuple* output, unsigned timeout_ms);
 
