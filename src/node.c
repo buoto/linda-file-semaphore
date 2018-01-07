@@ -42,7 +42,53 @@ bool match_node(
     const struct node *pattern,
     const struct node *value
 ) {
-    return true;
+    if(pattern->type != value->type) {
+        return false;
+    }
+
+    if(pattern->type == INTEGER) {
+        return match_integer(
+            pattern->matcher,
+            pattern->int_value,
+            value->int_value
+        );
+    } else {
+        return match_string(
+            pattern->matcher,
+            pattern->str_value,
+            value->str_value
+        );
+    }
+}
+bool match_integer(
+    enum node_matcher matcher,
+    unsigned pattern,
+    unsigned value
+) {
+    switch(matcher) {
+        case ANY:
+            return true;
+        case EQUAL:
+            return value == pattern;
+        case LESSER:
+            return value < pattern;
+        case LESSER_OR_EQUAL:
+            return value <= pattern;
+        case GREATER:
+            return value > pattern;
+        case GREATER_OR_EQUAL:
+            return value >= pattern;
+        default:
+            return false;
+    }
+}
+
+bool match_string(
+    enum node_matcher matcher,
+    const char *pattern,
+    const char *value
+) {
+    return false;
 }
 
 #define WILDCARD '*'

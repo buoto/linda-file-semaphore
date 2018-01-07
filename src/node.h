@@ -26,5 +26,15 @@ bool match_node(
     const struct node *value
 );
 bool match_pattern(const char *pattern, const char *value);
+bool match_integer(
+    enum node_matcher matcher,
+    unsigned pattern,
+    unsigned value
+);
+bool match_string(
+    enum node_matcher matcher,
+    const char *pattern,
+    const char *value
+);
 
 #endif /* end of include guard: NODE_H */
