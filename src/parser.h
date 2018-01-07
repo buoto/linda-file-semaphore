@@ -13,5 +13,6 @@ struct parse_result {
 };
 
 struct parse_result parse(char* user_input);
+int parse_node(struct node *n, int *iter, char *str);
 
 #endif

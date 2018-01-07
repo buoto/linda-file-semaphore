@@ -11,7 +11,8 @@ void whitespaces(int *iter, char* str)
 int parse_node(struct node *n, int *iter, char *str) {
     n->matcher = EQUAL;
 
-    if(str[(*iter)++] == '<') {
+    if(str[*iter] == '<') {
+        (*iter)++;
         if(str[*iter] == '='){
             // lesser or equal
             n->matcher = LESSER_OR_EQUAL;
@@ -20,7 +21,8 @@ int parse_node(struct node *n, int *iter, char *str) {
             // lesser
             n->matcher = LESSER;
         }
-    } else if(str[*iter++] == '>') {
+    } else if(str[*iter] == '>') {
+        (*iter)++;
         if(str[*iter] == '='){
             // greater or equal
             n->matcher = GREATER_OR_EQUAL;
@@ -36,10 +38,10 @@ int parse_node(struct node *n, int *iter, char *str) {
     if(str[*iter] >= '0' && str[*iter] <= '9') {
         //integer
         n->type = INTEGER;
-        n->value = 0;
+        n->int_value = 0;
         while(str[*iter] >= '0' && str[*iter] <= '9') {
-            n->value = n->value * 10;
-            n->value += str[*iter] - '0';
+            n->int_value *= 10;
+            n->int_value += str[*iter] - '0';
             (*iter)++;
         }
     } else if(str[*iter] == '\"') {
@@ -50,21 +52,22 @@ int parse_node(struct node *n, int *iter, char *str) {
             (*iter)++;
             i++;
             if(str[*iter] == '\0') {
-                return 0;
+                return 1;
             }
-        } while (str[*iter] != '\"')
+        } while (str[*iter] != '\"');
 
-        n->value = (char*)malloc(i);
-        strncpy(n->value, str + iter - i, i);
-    } else if(str[*iter == '*']) {
+        n->str_value = (char*)malloc(i);
+        strncpy(n->str_value, str + *iter - i, i);
+    } else if(str[*iter] == '*') {
         //any integer
+        (*iter)++;
         n->matcher = ANY_INTEGER;
         n->type = INTEGER;
     } else {
-        return 0;
+        return 1;
     }
 
-    return 1;
+    return 0;
 }
 
 struct parse_result parse(char* str) {
@@ -96,12 +99,10 @@ struct parse_result parse(char* str) {
     }
 
     iter+= strlen(word);
-
     whitespaces(&iter, str);
-
     // left bracket (
-    if(str[iter] != '(') {
-        res.error = iter + 1;
+    if(str[iter++] != '(') {
+        res.error = iter;
         return res;
     }
 
@@ -118,29 +119,32 @@ struct parse_result parse(char* str) {
             return res;
         }
 
-        tuple_append(&res.tuple, node);
+        tuple_append(&res.tuple, n);
         whitespaces(&iter, str);
         //comma
         if(str[iter] != ',') {
             break;
         }
+
     }
+    //print_node(res.tuple.elems[0]);
     whitespaces(&iter, str);
 
     // right bracket )
-    if(str[iter] != ')') {
-        res.error = iter + 1;
+    if(str[iter++] != ')') {
+        res.error = iter;
         return res;
     }
+
     whitespaces(&iter, str);
 
     // number (timeout)
     res.timeout_ms = 0;
-    if(str[iter] >= '0' && str[*iter] <= '9') {
+    if(str[iter] >= '0' && str[iter] <= '9') {
         while(str[iter] >= '0' && str[iter] <= '9') {
             res.timeout_ms *= 10;
-            res.timeout_ms += str[*iter] - '0';
-            (*iter)++;
+            res.timeout_ms += str[iter] - '0';
+            iter++;
         }
     } else {
         res.error = iter + 1;
@@ -151,7 +155,7 @@ struct parse_result parse(char* str) {
     if(str[iter] == '\0') {
         res.error = 0;
     } else {
-        res.error = 1;
+        res.error = iter + 1;
     }
     return res;
 }
