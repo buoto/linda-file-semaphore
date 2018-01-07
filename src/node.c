@@ -60,6 +60,7 @@ bool match_node(
         );
     }
 }
+
 bool match_integer(
     enum node_matcher matcher,
     unsigned pattern,
@@ -88,7 +89,22 @@ bool match_string(
     const char *pattern,
     const char *value
 ) {
-    return false;
+    switch(matcher) {
+        case ANY:
+            return true;
+        case EQUAL:
+            return match_pattern(pattern, value);
+        case LESSER:
+            return strcmp(value, pattern) < 0;
+        case LESSER_OR_EQUAL:
+            return strcmp(value, pattern) <= 0;
+        case GREATER:
+            return strcmp(value, pattern) > 0;
+        case GREATER_OR_EQUAL:
+            return strcmp(value, pattern) >= 0;
+        default:
+            return false;
+    }
 }
 
 #define WILDCARD '*'
