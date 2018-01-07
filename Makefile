@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-std=c99 -Wall -Wextra -pedantic -g -D DEBUG -O2 # -Werror
 LDFLAGS=-g -O2
-TESTFLAGS=-lcheck -pthread -lrt -lm -lsubunit
+TESTFLAGS=`pkg-config --libs --cflags check`
 
 SRCDIR=src
 OBJDIR=obj
