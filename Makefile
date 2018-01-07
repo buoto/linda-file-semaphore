@@ -12,11 +12,13 @@ TESTEXEC=$(EXEC)_test
 
 SRC=tuple.c node.c linda.c cli.c parser.c
 OBJ=$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
-OBJ_MAIN=$(OBJDIR)/main.o
+MAINOBJ=$(OBJDIR)/main.o
 
-.PHONY: all clean run debug test
+$(MAINOBJ): FORCE
 
-all: build
+.PHONY: all clean run debug test FORCE
+
+all: $(EXEC)
 
 run: $(EXEC)
 	./$(EXEC)
@@ -24,8 +26,8 @@ run: $(EXEC)
 debug: $(EXEC)
 	gdb $(EXEC)
 
-build: $(OBJDIR) $(OBJ_MAIN) $(OBJ) $(SRCHEADERS)
-	$(CC) $(LDFLAGS) -o $(EXEC) $(OBJ_MAIN) $(OBJ)
+$(EXEC): $(OBJDIR) $(MAINOBJ) $(OBJ) $(SRCHEADERS)
+	$(CC) $(LDFLAGS) -o $(EXEC) $(MAINOBJ) $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -35,10 +37,12 @@ $(OBJDIR):
 
 TEST_OBJ=$(OBJDIR)/tests_main.o
 
-test: build_test
+$(TEST_OBJ): FORCE
+
+test: $(TESTEXEC)
 	./$(TESTEXEC)
 
-build_test: $(OBJDIR) $(TEST_OBJ) $(OBJ)
+$(TESTEXEC): $(OBJDIR) $(TEST_OBJ) $(OBJ)
 	$(CC) $(LDFLAGS) -o $(TESTEXEC) $(TEST_OBJ) $(OBJ) $(TESTFLAGS)
 
 $(OBJDIR)/%.o: $(TESTDIR)/%.c
