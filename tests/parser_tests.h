@@ -1,9 +1,8 @@
 #include <check.h>
 #include <stdlib.h>
-#include "../src/tuple.h"
-#include "../src/node.h"
+#include "../src/parser.h"
 
-START_TEST(tuple_make)
+START_TEST(parser_init)
 {
 
 }

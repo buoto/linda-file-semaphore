@@ -5,15 +5,15 @@
 
 START_TEST(tuple_make)
 {
-    tuple t = make_tuple();
+    struct tuple t = make_tuple();
     ck_assert_int_eq(t.size, 0);
 }
 END_TEST
 
 START_TEST(tuple_append_one)
 {
-    tuple t = make_tuple();
-    node n = make_int_node(5);
+    struct tuple t = make_tuple();
+    struct node n = make_int_node(5);
     int ret = tuple_append(&t, n);
     ck_assert_int_eq(ret, 0);
     ck_assert_int_eq(t.size, 1);
@@ -23,8 +23,8 @@ END_TEST
 
 START_TEST(tuple_max_size)
 {
-    tuple t = make_tuple();
-    node n = make_string_node("ff", 2);
+    struct tuple t = make_tuple();
+    struct node n = make_string_node("ff", 2);
     int i;
     for(i = 0; i < 5; i++)
         tuple_append(&t, n);

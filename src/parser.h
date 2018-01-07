@@ -14,4 +14,4 @@ struct parse_result {
 
 struct parse_result parse(char* user_input);
 
-#endif PARSER_H
+#endif

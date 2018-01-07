@@ -4,6 +4,7 @@
 //  test files:
 #include "node_tests.h"
 #include "tuple_tests.h"
+#include "parser_tests.h"
 //  ----------
 
 int main(void)
