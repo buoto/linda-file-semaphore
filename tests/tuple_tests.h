@@ -41,9 +41,19 @@ struct match_tuple_case {
     int expected;
 } match_tuple_cases[] = {
     {
-        { 3, { NODE_I(1), NODE_I(2), NODE_I(3) } },
-        { 3, { NODE_I(1), NODE_I(2), NODE_I(3) } },
+        { 3, { NODE_I(1), NODE_S("a*"), NODE_IM(3, GREATER) } },
+        { 3, { NODE_I(1), NODE_S("abc"), NODE_I(5) } },
         true
+    },
+    {
+        { 3, { NODE_I(1), NODE_S("a*"), NODE_IM(3, GREATER) } },
+        { 3, { NODE_I(2), NODE_S("abc"), NODE_I(5) } },
+        false
+    },
+    {
+        { 3, { NODE_I(1), NODE_I(2), NODE_I(3) } },
+        { 2, { NODE_I(1), NODE_I(2) } },
+        false
     }
 };
 const int N_TUPLE_CASES = sizeof(match_tuple_cases) / sizeof(struct match_tuple_case);

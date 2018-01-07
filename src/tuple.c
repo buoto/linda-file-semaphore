@@ -22,5 +22,13 @@ bool match_tuple(
     const struct tuple *pattern,
     const struct tuple *value
 ) {
+    if(pattern->size != value->size) {
+        return false;
+    }
+    for(unsigned i = 0; i < pattern->size; i++) {
+        if(!match_node(&pattern->elems[i], &value->elems[i])) {
+            return false;
+        }
+    }
     return true;
 }
