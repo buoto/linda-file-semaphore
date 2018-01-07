@@ -14,10 +14,11 @@ struct node {
     void* value;
 };
 
-extern struct node make_string_node(const char* string, int size);
-extern struct node make_int_node(long long integer);
-extern void destroy_node(struct node* node);
-extern void print_node(struct node node);
+struct node make_string_node(const char *string, int size);
+struct node make_int_node(long long integer);
+void destroy_node(struct node *node);
+void print_node(struct node node);
 
+int match_pattern(const char *pattern, const char *value);
 
 #endif /* end of include guard: NODE_H */
