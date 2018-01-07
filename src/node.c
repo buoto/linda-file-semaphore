@@ -38,6 +38,13 @@ void print_node(struct node node) {
     }
 }
 
+bool match_node(
+    const struct node *pattern,
+    const struct node *value
+) {
+    return true;
+}
+
 #define WILDCARD '*'
 bool match_pattern(const char *pattern, const char *value) {
     unsigned pattern_index = 0;
