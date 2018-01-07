@@ -8,7 +8,7 @@ EXEC=linda
 LIB=linda
 LIB_FILE=$(OBJ_DIR)/lib$(LIB).a
 
-SRC=tuple.c node.c linda.c
+SRC=tuple.c node.c linda.c cli.c
 SRC_MAIN=main.c
 SRC_DIR=src
 SRC_OBJ_DIR=$(OBJ_DIR)/obj
