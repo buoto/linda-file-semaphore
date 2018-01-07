@@ -8,7 +8,9 @@
 #include "linda.h"
 
 void cli_start();
-void run_command(struct parse_result* result);
+int run_command(struct parse_result* result);
+void run_read_command(struct tuple* tuple, unsigned timeout_ms);
 void run_input_command(struct tuple* tuple, unsigned timeout_ms);
+void run_output_command(struct tuple* tuple);
 
 #endif
