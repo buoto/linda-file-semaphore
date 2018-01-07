@@ -1,5 +1,9 @@
 #include "cli.h"
 
 int main() {
-    cli_start();
+    struct cli cli = {
+        .linda = NULL,
+        .stream = stdin
+    };
+    cli_start(&cli);
 }
