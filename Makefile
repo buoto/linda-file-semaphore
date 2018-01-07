@@ -1,19 +1,18 @@
 CC=cc
 CFLAGS=-std=c99 -Wall -Wextra -pedantic -g -D DEBUG -O2 # -Werror
 LDFLAGS=-g -O2
+TESTFLAGS=-lcheck -lcheck_pic -pthread -lrt -lm -lsubunit
 
-OBJ_DIR=build
+SRCDIR=src
+OBJDIR=obj
+TESTDIR=tests
 
 EXEC=linda
-LIB=linda
-LIB_FILE=$(OBJ_DIR)/lib$(LIB).a
+TESTEXEC=$(EXEC)_test
 
 SRC=tuple.c node.c linda.c cli.c
-SRC_MAIN=main.c
-SRC_DIR=src
-SRC_OBJ_DIR=$(OBJ_DIR)/obj
-SRC_OBJ=$(addprefix $(SRC_OBJ_DIR)/,$(SRC:.c=.o))
-SRC_OBJ_MAIN=$(addprefix $(SRC_OBJ_DIR)/,$(SRC_MAIN:.c=.o))
+OBJ=$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
+OBJ_MAIN=$(OBJDIR)/main.o
 
 .PHONY: all clean run debug test
 
@@ -25,36 +24,25 @@ run: $(EXEC)
 debug: $(EXEC)
 	gdb $(EXEC)
 
-$(EXEC): $(SRC_OBJ_DIR) $(SRC_OBJ_MAIN) $(LIB_FILE)
-	$(CC) $(LDFLAGS) -o $(EXEC) $(SRC_OBJ_MAIN) -L$(OBJ_DIR) -l$(LIB)
+$(EXEC): $(OBJDIR) $(OBJ_MAIN) $(OBJ)
+	$(CC) $(LDFLAGS) -o $(EXEC) $(OBJ_MAIN) $(OBJ)
 
-$(LIB_FILE): $(SRC_OBJ_DIR) $(SRC_OBJ)
-	ar rcs $(LIB_FILE) $(SRC_OBJ)
-
-$(SRC_OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(SRC_OBJ_DIR):
-	mkdir -p $(SRC_OBJ_DIR)
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
-TEST_EXEC=$(EXEC)_test
+TEST_OBJ=$(OBJDIR)/tests_main.o
 
-TEST=tests_main.c
-TEST_DIR=tests
-TEST_OBJ_DIR=$(OBJ_DIR)/test_obj
-TEST_OBJ=$(addprefix $(TEST_OBJ_DIR)/,$(TEST:.c=.o))
+test: $(TESTEXEC)
+	./$(TESTEXEC)
 
-test: $(TEST_EXEC)
-	./$(TEST_EXEC)
+$(TESTEXEC): $(OBJDIR) $(TEST_OBJ) $(OBJ)
+	$(CC) $(LDFLAGS) -o $(TESTEXEC) $(TEST_OBJ) $(OBJ) $(TESTFLAGS)
 
-$(TEST_EXEC): $(TEST_OBJ_DIR) $(TEST_OBJ) $(LIB_FILE)
-	$(CC) $(LDFLAGS) -o $(TEST_EXEC) $(TEST_OBJ) -L$(OBJ_DIR) -l$(LIB) -lcheck
-
-$(TEST_OBJ_DIR)/%.o: $(TEST_DIR)/%.c
+$(OBJDIR)/%.o: $(TESTDIR)/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
-
-$(TEST_OBJ_DIR):
-	mkdir -p $(TEST_OBJ_DIR)
 
 clean:
-	rm -rf $(OBJ_DIR) $(EXEC) $(TEST_EXEC)
+	rm -rf $(OBJDIR) $(EXEC) $(TESTEXEC)
