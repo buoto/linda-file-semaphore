@@ -65,11 +65,27 @@ struct tuple* pop_in_store(
             } else {
                 prev->next = cur->next;
             }
-            return &(cur->element);
+            return &(cur->element); // mmr lik hr
         }
 
         prev = cur;
         cur = cur->next;
     }
     return NULL;
+}
+
+void destroy_store(struct store *s) {
+    if(s == NULL) {
+        return;
+    }
+
+    struct store_node *cur = s->first, *next;
+
+    while(cur != NULL) {
+        next = cur->next;
+        free(cur);
+        cur = next;
+    }
+
+    s->first = NULL;
 }

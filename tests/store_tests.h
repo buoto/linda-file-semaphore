@@ -12,6 +12,8 @@ START_TEST(store_make)
     struct store s = make_store();
 
     ck_assert_ptr_eq(s.first, NULL);
+
+    destroy_store(&s);
 }
 END_TEST
 
@@ -27,6 +29,8 @@ START_TEST(store_append)
     ck_assert_int_eq(s.first->element.elems[1].int_value, 3);
 
     ck_assert_ptr_eq(s.first->next, NULL);
+
+    destroy_store(&s);
 }
 END_TEST
 
@@ -42,6 +46,8 @@ START_TEST(store_append_multiple)
     ck_assert_int_eq(s.first->next->element.elems[0].int_value, 2);
     ck_assert_int_eq(s.first->next->next->element.elems[0].int_value, 3);
     ck_assert_ptr_eq(s.first->next->next->next, NULL);
+
+    destroy_store(&s);
 }
 END_TEST
 
@@ -58,6 +64,8 @@ START_TEST(store_find)
     ck_assert_int_eq(result->elems[0].int_value, 1);
     ck_assert_str_eq(result->elems[1].str_value, "a");
     ck_assert_int_eq(result->elems[2].int_value, 3);
+
+    destroy_store(&s);
 }
 END_TEST
 
@@ -73,6 +81,8 @@ START_TEST(store_find_but_missing)
     struct tuple *result = find_in_store(&s, pattern, match_tuple);
 
     ck_assert_ptr_eq(result, NULL);
+
+    destroy_store(&s);
 }
 END_TEST
 
@@ -91,5 +101,7 @@ START_TEST(store_pop)
     ck_assert_int_eq(s.first->element.elems[0].int_value, 1);
     ck_assert_int_eq(s.first->next->element.elems[0].int_value, 3);
     ck_assert_ptr_eq(s.first->next->next, NULL);
+
+    destroy_store(&s);
 }
 END_TEST
