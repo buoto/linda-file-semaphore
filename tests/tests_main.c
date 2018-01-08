@@ -28,7 +28,16 @@ int main(void)
     tcase_add_test(tc, tuple_max_size);
     tcase_add_loop_test(tc, tuple_match_tuple, 0, N_TUPLE_CASES);
 
-    tcase_add_test(tc, parser_init);
+    tcase_add_test(tc, parser_wrong);
+    tcase_add_test(tc, parser_empty);
+    tcase_add_test(tc, parser_bracket_error);
+    tcase_add_test(tc, parser_node_1);
+    tcase_add_test(tc, parser_node_2);
+    tcase_add_test(tc, parser_single_tuple_1);
+    tcase_add_test(tc, parser_single_tuple_2);
+    tcase_add_test(tc, parser_multiple_tuples_1);
+    tcase_add_test(tc, parser_multiple_tuples_2);
+    tcase_add_test(tc, parser_too_many_tuples);
     //  -----
 
     srunner_run_all(sr, CK_ENV);

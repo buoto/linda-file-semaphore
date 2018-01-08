@@ -9,9 +9,9 @@ struct parse_result {
     enum operation operation;
     struct tuple tuple;
     unsigned timeout_ms;
-    char* error;
 };
 
-struct parse_result parse(char* user_input);
+int parse(struct parse_result *res, char *user_input);
+int parse_node(struct node *n, int *iter, char *str);
 
 #endif

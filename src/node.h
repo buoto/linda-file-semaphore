@@ -12,7 +12,7 @@
 #define NODE_SM(V, M) { .type = STRING, .str_value = V, .matcher = M }
 
 enum node_type { INTEGER, STRING };
-enum node_matcher { NONE, LESSER, GREATER, LESSER_OR_EQUAL, GREATER_OR_EQUAL, EQUAL, ANY };
+enum node_matcher { EQUAL, LESSER, LESSER_OR_EQUAL, GREATER, GREATER_OR_EQUAL, ANY_INTEGER };
 
 struct node {
     enum node_type type;

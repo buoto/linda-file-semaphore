@@ -142,4 +142,3 @@ bool match_pattern(const char *pattern, const char *value) {
         }
     }
 }
-
