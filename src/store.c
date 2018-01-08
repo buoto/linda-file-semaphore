@@ -74,6 +74,26 @@ struct tuple* pop_in_store(
     return NULL;
 }
 
+int fprintf_store(const struct store *s, FILE* stream) {
+    if(s == NULL) {
+        return -1;
+    }
+
+    struct store_node *cur = s->first;
+
+    while(cur != NULL) {
+        // TODO serialize tuple
+        int result = fprintf(stream, "asd\n");
+        if(result < 0 ) {
+            return result;
+        }
+
+        cur = cur->next;
+    }
+
+    return 0;
+}
+
 void destroy_store(struct store *s) {
     if(s == NULL) {
         return;
