@@ -78,3 +78,13 @@ int write_store_file(struct file *f, struct store *s) {
 
     return result;
 }
+
+void destroy_file(struct file *f) {
+    if(f == NULL || f->sem) {
+        return;
+    }
+
+    sem_close(f->sem);
+
+    f->sem = NULL;
+}
