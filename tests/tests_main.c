@@ -21,10 +21,12 @@ int main(void)
     tcase_add_test(tc, node_make_string);
     tcase_add_test(tc, node_destroy_string);
     tcase_add_loop_test(tc, node_match_pattern, 0, N_PATTERN_CASES);
+    tcase_add_loop_test(tc, node_match_node, 0, N_NODE_CASES);
 
     tcase_add_test(tc, tuple_make);
     tcase_add_test(tc, tuple_append_one);
     tcase_add_test(tc, tuple_max_size);
+    tcase_add_loop_test(tc, tuple_match_tuple, 0, N_TUPLE_CASES);
 
     tcase_add_test(tc, parser_init);
     //  -----

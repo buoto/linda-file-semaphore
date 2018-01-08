@@ -26,6 +26,51 @@ START_TEST(node_destroy_string)
 }
 END_TEST
 
+struct match_node_case {
+    struct node pattern;
+    struct node value;
+    int expected;
+} match_node_cases[] = {
+    { NODE_I(123), NODE_S("abc"), 0 },
+    { NODE_I(123), NODE_I(123), 1 },
+    { NODE_I(123), NODE_I(45), 0 },
+    { NODE_IM(0, ANY), NODE_I(123), 1 },
+    { NODE_IM(5, LESSER), NODE_I(4), 1 },
+    { NODE_IM(5, LESSER), NODE_I(5), 0 },
+    { NODE_IM(5, LESSER_OR_EQUAL), NODE_I(5), 1 },
+    { NODE_IM(5, LESSER_OR_EQUAL), NODE_I(6), 0 },
+    { NODE_IM(5, GREATER), NODE_I(6), 1 },
+    { NODE_IM(5, GREATER), NODE_I(5), 0 },
+    { NODE_IM(5, GREATER_OR_EQUAL), NODE_I(5), 1 },
+    { NODE_IM(5, GREATER_OR_EQUAL), NODE_I(4), 0 },
+    { NODE_S("abc"), NODE_S("abc"), 1 },
+    { NODE_S("abc"), NODE_S("de"), 0 },
+    { NODE_S("*"), NODE_S("abc"), 1 },
+    { NODE_SM("abc", LESSER), NODE_S("aaaa"), 1 },
+    { NODE_SM("abc", LESSER), NODE_S("abc"), 0 },
+    { NODE_SM("abc", LESSER), NODE_S("b"), 0 },
+    { NODE_SM("abc", LESSER_OR_EQUAL), NODE_S("aaaa"), 1 },
+    { NODE_SM("abc", LESSER_OR_EQUAL), NODE_S("abc"), 1 },
+    { NODE_SM("abc", LESSER_OR_EQUAL), NODE_S("b"), 0 },
+    { NODE_SM("abc", GREATER), NODE_S("b"), 1 },
+    { NODE_SM("abc", GREATER), NODE_S("abc"), 0 },
+    { NODE_SM("abc", GREATER), NODE_S("aaaa"), 0 },
+    { NODE_SM("abc", GREATER_OR_EQUAL), NODE_S("b"), 1 },
+    { NODE_SM("abc", GREATER_OR_EQUAL), NODE_S("abc"), 1 },
+    { NODE_SM("abc", GREATER_OR_EQUAL), NODE_S("aaaa"), 0 },
+};
+const int N_NODE_CASES = sizeof(match_node_cases) / sizeof(struct match_node_case);
+
+START_TEST(node_match_node)
+{
+    int result = match_node(
+        &match_node_cases[_i].pattern,
+        &match_node_cases[_i].value
+    );
+    ck_assert_int_eq(result, match_node_cases[_i].expected);
+}
+END_TEST
+
 struct match_pattern_case {
     const char *pattern;
     const char *value;

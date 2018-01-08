@@ -38,8 +38,77 @@ void print_node(struct node node) {
     }
 }
 
+bool match_node(
+    const struct node *pattern,
+    const struct node *value
+) {
+    if(pattern->type != value->type) {
+        return false;
+    }
+
+    if(pattern->type == INTEGER) {
+        return match_integer(
+            pattern->matcher,
+            pattern->int_value,
+            value->int_value
+        );
+    } else {
+        return match_string(
+            pattern->matcher,
+            pattern->str_value,
+            value->str_value
+        );
+    }
+}
+
+bool match_integer(
+    enum node_matcher matcher,
+    unsigned pattern,
+    unsigned value
+) {
+    switch(matcher) {
+        case ANY:
+            return true;
+        case EQUAL:
+            return value == pattern;
+        case LESSER:
+            return value < pattern;
+        case LESSER_OR_EQUAL:
+            return value <= pattern;
+        case GREATER:
+            return value > pattern;
+        case GREATER_OR_EQUAL:
+            return value >= pattern;
+        default:
+            return false;
+    }
+}
+
+bool match_string(
+    enum node_matcher matcher,
+    const char *pattern,
+    const char *value
+) {
+    switch(matcher) {
+        case ANY:
+            return true;
+        case EQUAL:
+            return match_pattern(pattern, value);
+        case LESSER:
+            return strcmp(value, pattern) < 0;
+        case LESSER_OR_EQUAL:
+            return strcmp(value, pattern) <= 0;
+        case GREATER:
+            return strcmp(value, pattern) > 0;
+        case GREATER_OR_EQUAL:
+            return strcmp(value, pattern) >= 0;
+        default:
+            return false;
+    }
+}
+
 #define WILDCARD '*'
-int match_pattern(const char *pattern, const char *value) {
+bool match_pattern(const char *pattern, const char *value) {
     unsigned pattern_index = 0;
     unsigned value_index = 0;
 
@@ -55,21 +124,21 @@ int match_pattern(const char *pattern, const char *value) {
                     &pattern[pattern_index+1],
                     &value[value_index]
                 )) {
-                    return 1;
+                    return true;
                 } else {
                     value_index++;
                     break;
                 }
             default:
                 if(pattern_char != value_char) {
-                    return 0;
+                    return false;
                 }
                 pattern_index++;
                 value_index++;
         }
 
         if(value_char == 0) {
-            return 0;
+            return false;
         }
     }
 }
