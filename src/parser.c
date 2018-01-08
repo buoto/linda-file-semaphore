@@ -63,7 +63,9 @@ int parse_node(struct node *n, int *iter, char *str) {
 
         n->str_value = (char*)malloc(i);
         strncpy(n->str_value, str + *iter - i, i);
+        n->str_value[i] = '\0';
         (*iter)++;
+
     } else if(str[*iter] == '*') {
         //any integer
         (*iter)++;
@@ -76,7 +78,44 @@ int parse_node(struct node *n, int *iter, char *str) {
     return 0;
 }
 
-int parse(struct parse_result *res, char* str) {
+int parse_tuple(struct tuple *t, char *str, int *iter) {
+
+    whitespaces(iter, str);
+    if(str[*iter] != '(') {
+        return *iter;
+    }
+    (*iter)++;
+
+    //tuples
+    struct node n;
+    int i = 0;
+    while (str[*iter] != ')') {
+        whitespaces(iter, str);
+
+        // node
+        if(parse_node(&n, iter, str) != 0) {
+            return *iter;
+        }
+
+        tuple_append(t, n);
+        whitespaces(iter, str);
+        //comma
+        if(i == 4 || str[*iter] != ',') {
+            break;
+        }
+        i++;
+        (*iter)++;
+    }
+
+    // right bracket )
+    if(str[*iter] != ')') {
+        return *iter;
+    }
+    (*iter)++;
+    return 0;
+}
+
+int parse(struct parse_result *res, char *str) {
     int iter = 0;
     char word[8];
 
@@ -104,43 +143,12 @@ int parse(struct parse_result *res, char* str) {
     }
 
     iter+= strlen(word);
-    whitespaces(&iter, str);
-    // left bracket (
-    if(str[iter] != '(') {
-        print_error(iter, str);
-        return iter;
-    }
-    iter++;
-
-    //tuples
     res->tuple = make_tuple();
-    struct node n;
-    int i = 0;
-    while (str[iter] != ')') {
-        whitespaces(&iter, str);
 
-        // node
-        if(parse_node(&n, &iter, str) != 0) {
-            print_error(iter, str);
-            return iter;
-        }
-
-        tuple_append(&res->tuple, n);
-        whitespaces(&iter, str);
-        //comma
-        if(i == 4 || str[iter] != ',') {
-            break;
-        }
-        i++;
-        iter++;
-    }
-
-    // right bracket )
-    if(str[iter] != ')') {
+    if(parse_tuple(&res->tuple, str, &iter) != 0) {
         print_error(iter, str);
         return iter;
-    }
-    iter++;
+    };
 
     whitespaces(&iter, str);
 
@@ -163,6 +171,22 @@ int parse(struct parse_result *res, char* str) {
         return 0;
     } else {
         print_error(iter, str);
-        return iter + 1;
+        return iter;
+    }
+}
+
+int deserialize_tuple(struct tuple *t, char *str) {
+    int iter = 0;
+
+    if(parse_tuple(t, str, &iter) != 0) {
+        print_error(iter, str);
+        return iter;
+    };
+
+    if(str[iter] == '\0') {
+        return 0;
+    } else {
+        print_error(iter, str);
+        return iter;
     }
 }

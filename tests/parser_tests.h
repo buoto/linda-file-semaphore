@@ -108,3 +108,12 @@ START_TEST(parser_too_many_tuples)
     ck_assert_int_eq(res, 14);
 }
 END_TEST
+
+START_TEST(parser_deserialize_tuple)
+{
+    struct tuple t = make_tuple();
+    int res = deserialize_tuple(&t, "(\"buo*tes\")");
+    ck_assert_int_eq(res, 0);
+    ck_assert_str_eq(t.elems[0].str_value, "buo*tes");
+}
+END_TEST

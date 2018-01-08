@@ -38,6 +38,7 @@ int main(void)
     tcase_add_test(tc, parser_multiple_tuples_1);
     tcase_add_test(tc, parser_multiple_tuples_2);
     tcase_add_test(tc, parser_too_many_tuples);
+    tcase_add_test(tc, parser_deserialize_tuple);
     //  -----
 
     srunner_run_all(sr, CK_ENV);
