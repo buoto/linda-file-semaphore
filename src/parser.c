@@ -8,7 +8,7 @@ void whitespaces(int *iter, char* str) {
 
 void print_error(int iter, char* str) {
     printf("error: %s\n      ", str);
-    for(int i = 0; i < iter; i++)
+    for(int i = 0; i <= iter; i++)
         printf(" ");
     printf("^\n");
 }
@@ -76,10 +76,9 @@ int parse_node(struct node *n, int *iter, char *str) {
     return 0;
 }
 
-struct parse_result parse(char* str) {
+int parse(struct parse_result *res, char* str) {
     int iter = 0;
-    struct parse_result res;
-    char word[7];
+    char word[8];
 
     whitespaces(&iter, str);
 
@@ -87,35 +86,34 @@ struct parse_result parse(char* str) {
     switch(str[iter]) {
         case 'i':
             strcpy(word, "input");
-            res.operation = INPUT;
+            res->operation = INPUT;
             break;
         case 'o':
             strcpy(word, "output");
-            res.operation = OUTPUT;
+            res->operation = OUTPUT;
             break;
         case 'r':
             strcpy(word, "read");
-            res.operation = READ;
+            res->operation = READ;
             break;
     }
 
     if(strncmp(str + iter, word, strlen(word)) != 0) {
         print_error(iter, str);
-        res.error = iter + 1;
-        return res;
+        return iter;
     }
 
     iter+= strlen(word);
     whitespaces(&iter, str);
     // left bracket (
-    if(str[iter++] != '(') {
+    if(str[iter] != '(') {
         print_error(iter, str);
-        res.error = iter;
-        return res;
+        return iter;
     }
+    iter++;
 
     //tuples
-    res.tuple = make_tuple();
+    res->tuple = make_tuple();
     struct node n;
     int i = 0;
     while (str[iter] != ')') {
@@ -124,11 +122,10 @@ struct parse_result parse(char* str) {
         // node
         if(parse_node(&n, &iter, str) != 0) {
             print_error(iter, str);
-            res.error = iter + 1;
-            return res;
+            return iter;
         }
 
-        tuple_append(&res.tuple, n);
+        tuple_append(&res->tuple, n);
         whitespaces(&iter, str);
         //comma
         if(i == 4 || str[iter] != ',') {
@@ -139,35 +136,33 @@ struct parse_result parse(char* str) {
     }
 
     // right bracket )
-    if(str[iter++] != ')') {
+    if(str[iter] != ')') {
         print_error(iter, str);
-        res.error = iter;
-        return res;
+        return iter;
     }
+    iter++;
 
     whitespaces(&iter, str);
 
     // number (timeout)
-    res.timeout_ms = 0;
+    res->timeout_ms = 0;
     if(str[iter] >= '0' && str[iter] <= '9') {
         while(str[iter] >= '0' && str[iter] <= '9') {
-            res.timeout_ms *= 10;
-            res.timeout_ms += str[iter] - '0';
+            res->timeout_ms *= 10;
+            res->timeout_ms += str[iter] - '0';
             iter++;
         }
     } else {
         print_error(iter, str);
-        res.error = iter + 1;
-        return res;
+        return iter + 1;
     }
 
     whitespaces(&iter, str);
 
     if(str[iter] == '\0') {
-        res.error = 0;
+        return 0;
     } else {
         print_error(iter, str);
-        res.error = iter + 1;
+        return iter + 1;
     }
-    return res;
 }

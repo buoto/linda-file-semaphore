@@ -7,14 +7,15 @@ void cli_start(const struct cli *cli) {
 
     while((nread = getline(&line, &len, cli->stream)) != -1) {
         line[nread - 1] = 0;
-        struct parse_result result = parse(line);
+        struct parse_result pr;
+        int result = parse(&pr, line);
 
-        if(result.error) {
-            printf("%s\n", result.error);
+        if(result) {
+            printf("%s\n", result);
             continue;
         }
 
-        if(run_command(cli->linda, &result) == 1) {
+        if(run_command(cli->linda, &pr) == 1) {
             break;
         }
     }
