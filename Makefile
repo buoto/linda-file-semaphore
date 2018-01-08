@@ -10,7 +10,7 @@ TESTDIR=tests
 EXEC=linda
 TESTEXEC=$(EXEC)_test
 
-SRC=tuple.c node.c linda.c cli.c parser.c file.c
+SRC=tuple.c node.c linda.c cli.c parser.c file.c store.c
 OBJ=$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 MAINOBJ=$(OBJDIR)/main.o
 
