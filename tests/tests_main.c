@@ -5,6 +5,8 @@
 #include "node_tests.h"
 #include "tuple_tests.h"
 #include "parser_tests.h"
+#include "file_tests.h"
+#include "store_tests.h"
 //  ----------
 
 int main(void)
@@ -39,6 +41,12 @@ int main(void)
     tcase_add_test(tc, parser_multiple_tuples_2);
     tcase_add_test(tc, parser_too_many_tuples);
     tcase_add_test(tc, parser_deserialize_tuple);
+
+    tcase_add_test(tc, file_make_linda_file_filename_copied);
+
+    tcase_add_test(tc, store_make);
+    tcase_add_test(tc, store_append);
+    tcase_add_test(tc, store_find);
     //  -----
 
     srunner_run_all(sr, CK_ENV);
