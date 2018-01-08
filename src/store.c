@@ -39,7 +39,7 @@ struct tuple* find_in_store(
     struct store_node *cur = s->first;
 
     while(cur != NULL) {
-        if(f(pattern, cur->element)) {
+        if(f(&pattern, &cur->element)) {
             return &(cur->element);
         }
 
