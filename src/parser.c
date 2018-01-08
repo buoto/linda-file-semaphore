@@ -67,7 +67,7 @@ int parse_node(struct node *n, int *iter, char *str) {
     } else if(str[*iter] == '*') {
         //any integer
         (*iter)++;
-        n->matcher = ANY_INTEGER;
+        n->matcher = ANY;
         n->type = INTEGER;
     } else {
         return 1;

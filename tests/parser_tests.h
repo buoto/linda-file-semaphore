@@ -63,7 +63,7 @@ START_TEST(parser_single_tuple_2)
     struct parse_result pr;
     int res = parse(&pr, "input (*) 13");
     ck_assert_int_eq(res, 0);
-    ck_assert_int_eq(pr.tuple.elems[0].matcher, ANY_INTEGER);
+    ck_assert_int_eq(pr.tuple.elems[0].matcher, ANY);
     ck_assert_int_eq(pr.operation, INPUT);
     ck_assert_int_eq(pr.timeout_ms, 13);
 }
