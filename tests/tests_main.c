@@ -46,7 +46,10 @@ int main(void)
 
     tcase_add_test(tc, store_make);
     tcase_add_test(tc, store_append);
+    tcase_add_test(tc, store_append_multiple);
     tcase_add_test(tc, store_find);
+    tcase_add_test(tc, store_find_but_missing);
+    tcase_add_test(tc, store_pop);
     //  -----
 
     srunner_run_all(sr, CK_ENV);

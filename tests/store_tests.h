@@ -30,6 +30,21 @@ START_TEST(store_append)
 }
 END_TEST
 
+START_TEST(store_append_multiple)
+{
+    struct store s = make_store();
+
+    append_store(&s, (struct tuple) { 1, { NODE_I(1) } });
+    append_store(&s, (struct tuple) { 1, { NODE_I(2) } });
+    append_store(&s, (struct tuple) { 1, { NODE_I(3) } });
+
+    ck_assert_int_eq(s.first->element.elems[0].int_value, 1);
+    ck_assert_int_eq(s.first->next->element.elems[0].int_value, 2);
+    ck_assert_int_eq(s.first->next->next->element.elems[0].int_value, 3);
+    ck_assert_ptr_eq(s.first->next->next->next, NULL);
+}
+END_TEST
+
 START_TEST(store_find)
 {
     struct store s = make_store();
@@ -43,5 +58,38 @@ START_TEST(store_find)
     ck_assert_int_eq(result->elems[0].int_value, 1);
     ck_assert_str_eq(result->elems[1].str_value, "a");
     ck_assert_int_eq(result->elems[2].int_value, 3);
+}
+END_TEST
+
+START_TEST(store_find_but_missing)
+{
+    struct store s = make_store();
+
+    struct tuple pattern =  { 1, { NODE_I(2) } };
+
+    struct tuple t = { 3, { NODE_I(2), NODE_S("a"), NODE_I(3213) } };
+    append_store(&s, t);
+
+    struct tuple *result = find_in_store(&s, pattern, match_tuple);
+
+    ck_assert_ptr_eq(result, NULL);
+}
+END_TEST
+
+START_TEST(store_pop)
+{
+    struct store s = make_store();
+
+    struct tuple pattern =  { 1, { NODE_I(2) } };
+    append_store(&s, (struct tuple) { 1, { NODE_I(1) } });
+    append_store(&s, (struct tuple) { 1, { NODE_I(2) } });
+    append_store(&s, (struct tuple) { 1, { NODE_I(3) } });
+
+    struct tuple *result = pop_in_store(&s, pattern, match_tuple);
+
+    ck_assert_ptr_ne(result, NULL);
+    ck_assert_int_eq(s.first->element.elems[0].int_value, 1);
+    ck_assert_int_eq(s.first->next->element.elems[0].int_value, 3);
+    ck_assert_ptr_eq(s.first->next->next, NULL);
 }
 END_TEST

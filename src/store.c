@@ -47,3 +47,29 @@ struct tuple* find_in_store(
     }
     return NULL;
 }
+
+struct tuple* pop_in_store(
+        struct store *s,
+        const struct tuple pattern,
+        tuple_comparer f
+) {
+    if(s == NULL) {
+        return NULL;
+    }
+    struct store_node *cur = s->first, *prev = NULL;
+
+    while(cur != NULL) {
+        if(f(&pattern, &cur->element)) {
+            if(prev == NULL) {
+                s->first = cur->next;
+            } else {
+                prev->next = cur->next;
+            }
+            return &(cur->element);
+        }
+
+        prev = cur;
+        cur = cur->next;
+    }
+    return NULL;
+}
