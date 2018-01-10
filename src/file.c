@@ -57,7 +57,7 @@ int read_store_file(struct file *f, struct store *s) {
     while ((nread = getline(&line, &len, fd)) != -1) {
         struct tuple t = make_tuple();
         deserialize_tuple(&t, line);
-        append_store(s, t);
+        store_append(s, t);
     }
 
     fclose(fd);

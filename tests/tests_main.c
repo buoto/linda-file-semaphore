@@ -49,7 +49,7 @@ int main(void)
     tcase_add_test(tc, file_make_linda_file_filename_copied);
 
     tcase_add_test(tc, store_make);
-    tcase_add_test(tc, store_append);
+    tcase_add_test(tc, store_append_tuple);
     tcase_add_test(tc, store_append_multiple);
     tcase_add_test(tc, store_find);
     tcase_add_test(tc, store_find_but_missing);

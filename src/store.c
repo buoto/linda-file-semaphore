@@ -9,7 +9,7 @@ struct store make_store() {
     return (struct store) {NULL};
 }
 
-void append_store(struct store *s, struct tuple t) {
+void store_append(struct store *s, struct tuple t) {
     if(s == NULL) {
         return;
     }
