@@ -19,6 +19,8 @@ bool match_tuple(
     const struct tuple *value
 );
 
+typedef bool (*tuple_comparer)(const struct tuple*, const struct tuple*);
+
 size_t tuple_length(const struct tuple *t);
 size_t tuple_serialize(const struct tuple *t, char *out, size_t length);
 #endif /* end of include guard: TUPLE_H */
