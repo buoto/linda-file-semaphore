@@ -40,6 +40,7 @@ int main(void)
     tcase_add_test(tc, parser_single_tuple_2);
     tcase_add_test(tc, parser_multiple_tuples_1);
     tcase_add_test(tc, parser_multiple_tuples_2);
+    tcase_add_test(tc, parser_tuple_no_timeout_provided);
     tcase_add_test(tc, parser_too_many_tuples);
     tcase_add_test(tc, parser_deserialize_tuple);
 
