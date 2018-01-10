@@ -25,12 +25,12 @@ struct file {
 
 struct file make_linda_file(char *path, size_t size);
 
-int timed_lock(struct file *f, const struct timespec *ts);
-int lock(struct file *f);
-int unlock(struct file *f);
+int timed_lock(const struct file *f, const struct timespec *ts);
+int lock(const struct file *f);
+int unlock(const struct file *f);
 
-int read_store_file(struct file *f, struct store *s);
-int write_store_file(struct file *f, struct store *s);
+int read_store_file(const struct file *f, struct store *s);
+int write_store_file(const struct file *f, struct store *s);
 
 void destroy_file(struct file *f);
 

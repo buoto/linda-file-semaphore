@@ -1,18 +1,23 @@
 #ifndef LINDA_H
 #define LINDA_H
 
+#define _GNU_SOURCE
+
 #include <fcntl.h>
 #include <sys/types.h>
 #include <semaphore.h>
+#include <time.h>
 
 #include "file.h"
 #include "tuple.h"
 #include "store.h"
+#include "time_utils.h"
 
 struct linda {
     sem_t *reader_mutex;
     sem_t *done_reading;
     sem_t *notify;
+    sem_t *readers_count;
 
     struct file file;
 };

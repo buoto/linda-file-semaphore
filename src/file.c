@@ -21,28 +21,28 @@ struct file make_linda_file(char *path, size_t size) {
     };
 }
 
-int timed_lock(struct file *f, const struct timespec *ts) {
+int timed_lock(const struct file *f, const struct timespec *ts) {
     if(f == NULL || f->sem == NULL) {
         return -1;
     }
     return sem_timedwait(f->sem, ts);
 }
 
-int lock(struct file *f) {
+int lock(const struct file *f) {
     if(f == NULL || f->sem == NULL) {
         return -1;
     }
     return sem_wait(f->sem);
 }
 
-int unlock(struct file *f) {
+int unlock(const struct file *f) {
     if(f == NULL || f->sem == NULL) {
         return -1;
     }
     return sem_post(f->sem);
 }
 
-int read_store_file(struct file *f, struct store *s) {
+int read_store_file(const struct file *f, struct store *s) {
     if(f == NULL || f->path == NULL || s == NULL) {
         return -1; // NULL pointer
     }
@@ -68,7 +68,7 @@ int read_store_file(struct file *f, struct store *s) {
     return 0;
 }
 
-int write_store_file(struct file *f, struct store *s) {
+int write_store_file(const struct file *f, struct store *s) {
     if(f == NULL || f->path == NULL || s == NULL) {
         return -1; // NULL pointer
     }
