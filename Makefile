@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-std=c11 -Wall -Wextra -pedantic -g -D DEBUG -O2# -Werror
-LDFLAGS=-g -O2 -lpthread -lm
+CFLAGS=-std=c11 -Wall -Wextra -pedantic -g -D DEBUG# -O2 -Werror
+LDFLAGS=-g -lpthread -lm # -O2
 TESTFLAGS=`pkg-config --libs --cflags check`
 
 SRCDIR=src
