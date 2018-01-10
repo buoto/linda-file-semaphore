@@ -32,3 +32,26 @@ bool match_tuple(
     }
     return true;
 }
+
+#define BRACKET_LEN 2
+#define COMA_LEN 1
+#define QUOTE_LEN 2
+
+size_t tuple_length(const struct tuple *t) {
+    if(t == NULL) {
+        return 0;
+    }
+
+    size_t length = BRACKET_LEN;
+    for(int i = 0; i < t->size; i++) {
+        length += node_length(t->elems[i]);
+
+        if(t->elems[i].type == STRING) {
+            length += QUOTE_LEN;
+        }
+    }
+    if(t->size > 0) {
+        length += COMA_LEN * (t->size - 1); // add commas
+    }
+    return length;
+}

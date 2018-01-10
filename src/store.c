@@ -83,10 +83,15 @@ int fprintf_store(const struct store *s, FILE* stream) {
 
     while(cur != NULL) {
         // TODO serialize tuple
-        int result = fprintf(stream, "asd\n");
+        size_t length = tuple_length(&cur->element);
+        char *buf = (char*) malloc(length + 1);
+
+        int result = -1; //tuple_serialize(cur->element, buf, length);
+
         if(result < 0 ) {
             return result;
         }
+        buf[length] = 0;
 
         cur = cur->next;
     }

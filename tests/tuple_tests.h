@@ -67,3 +67,21 @@ START_TEST(tuple_match_tuple)
     ck_assert_int_eq(result, match_tuple_cases[_i].expected);
 }
 END_TEST
+
+struct tuple_length_case {
+    struct tuple value;
+    size_t expected;
+} tuple_length_cases[] = {
+    {{ 0, { } }, 2},
+    {{ 1, { NODE_I(1) } }, 3},
+    {{ 2, { NODE_I(1), NODE_I(1) } }, 5},
+    {{ 3, { NODE_I(1), NODE_S("add"), NODE_I(3333) } }, 14},
+};
+const int N_TUPLE_LENGTH_CASES = sizeof(tuple_length_cases) / sizeof(struct tuple_length_case);
+
+START_TEST(tuple_length_test)
+{
+    size_t result = tuple_length(&tuple_length_cases[_i].value);
+    ck_assert_int_eq(result, tuple_length_cases[_i].expected);
+}
+END_TEST
