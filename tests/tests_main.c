@@ -7,6 +7,7 @@
 #include "parser_tests.h"
 #include "file_tests.h"
 #include "store_tests.h"
+#include "time_utils_tests.h"
 //  ----------
 
 int main(void)
@@ -54,6 +55,10 @@ int main(void)
     tcase_add_test(tc, store_find);
     tcase_add_test(tc, store_find_but_missing);
     tcase_add_test(tc, store_pop);
+
+    tcase_add_test(tc, add_ms_one);
+    tcase_add_test(tc, add_ms_overflow);
+    tcase_add_test(tc, add_ms_overflow_int);
     //  -----
 
     srunner_run_all(sr, CK_ENV);
