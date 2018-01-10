@@ -14,8 +14,8 @@ struct timespec from_ms(unsigned ms);
 
 struct timespec get_now();
 
-struct timespec add_ms(const struct timespec *ts, long ms);
+int set_now(struct timespec *ts);
 
-time_t sem_timedwait_ms(sem_t *sem, time_t timeout_ms);
+struct timespec add_ms(struct timespec *ts, long ms);
 
 #endif /* end of include guard: TIME_UTILS_H */
