@@ -55,3 +55,38 @@ size_t tuple_length(const struct tuple *t) {
     }
     return length;
 }
+
+size_t tuple_serialize(const struct tuple *t, char *out, size_t length) {
+    int iter = 0;
+    out[iter++] = '(';
+    for(int i = 0; i < t->size; i++) {
+        struct node n = t->elems[i];
+        int n_len = node_length(n);
+
+        int result = 0;
+        switch(n.type) {
+            case STRING:
+                out[iter++] = '"';
+                result = strncpy(out + iter, n.str_value, n_len);
+                iter += n_len;
+                out[iter++] = '"';
+                break;
+            case INTEGER:
+                result = sprintf(out + iter, "%d", n.int_value);
+                iter += n_len;
+                break;
+        }
+        if(result < 0) {
+            return result; // handle error
+        }
+
+        out[iter++] = ',';
+    }
+    if(t->size > 0) {
+        iter--; // overwrite last comma
+    }
+    out[iter++] = ')';
+    out[iter++] = 0;
+
+    return iter; // return written bytes
+}

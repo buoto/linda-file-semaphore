@@ -31,6 +31,7 @@ int main(void)
     tcase_add_test(tc, tuple_max_size);
     tcase_add_loop_test(tc, tuple_match_tuple, 0, N_TUPLE_CASES);
     tcase_add_loop_test(tc, tuple_length_test, 0, N_TUPLE_LENGTH_CASES);
+    tcase_add_loop_test(tc, tuple_serialize_test, 0, N_TUPLE_SERIALIZE_CASES);
 
     tcase_add_test(tc, parser_wrong);
     tcase_add_test(tc, parser_empty);
