@@ -72,7 +72,7 @@ END_TEST
 START_TEST(parser_multiple_tuples_1)
 {
     struct parse_result pr;
-    int res = parse(&pr, "output (>\"ddd\", <=555) 7");
+    int res = parse(&pr, "output (>\"ddd\", <=555) ");
     ck_assert_int_eq(res, 0);
     ck_assert_int_eq(pr.operation, OUTPUT);
     ck_assert_int_eq(pr.tuple.size, 2);
@@ -80,14 +80,13 @@ START_TEST(parser_multiple_tuples_1)
     ck_assert_str_eq(pr.tuple.elems[0].str_value, "ddd");
     ck_assert_int_eq(pr.tuple.elems[1].matcher, LESSER_OR_EQUAL);
     ck_assert_int_eq(pr.tuple.elems[1].int_value, 555);
-    ck_assert_int_eq(pr.timeout_ms, 7);
 }
 END_TEST
 
 START_TEST(parser_multiple_tuples_2)
 {
     struct parse_result pr;
-    int res = parse(&pr, " output (  >= \"*\", < \"buo\" , \"hehe\" ) 2137 ");
+    int res = parse(&pr, " output (  >= \"*\", < \"buo\" , \"hehe\" )");
     ck_assert_int_eq(res, 0);
     ck_assert_int_eq(pr.operation, OUTPUT);
     ck_assert_int_eq(pr.tuple.size, 3);
@@ -97,7 +96,6 @@ START_TEST(parser_multiple_tuples_2)
     ck_assert_str_eq(pr.tuple.elems[1].str_value, "buo");
     ck_assert_int_eq(pr.tuple.elems[2].matcher, EQUAL);
     ck_assert_str_eq(pr.tuple.elems[2].str_value, "hehe");
-    ck_assert_int_eq(pr.timeout_ms, 2137);
 }
 END_TEST
 

@@ -150,21 +150,21 @@ int parse(struct parse_result *res, char *str) {
         return iter;
     };
 
-    whitespaces(&iter, str);
-
-    // number (timeout)
-    res->timeout_ms = 0;
-    if(str[iter] >= '0' && str[iter] <= '9') {
-        while(str[iter] >= '0' && str[iter] <= '9') {
-            res->timeout_ms *= 10;
-            res->timeout_ms += str[iter] - '0';
-            iter++;
+    if(res->operation != OUTPUT) {
+        whitespaces(&iter, str);
+        // number (timeout)
+        res->timeout_ms = 0;
+        if(str[iter] >= '0' && str[iter] <= '9') {
+            while(str[iter] >= '0' && str[iter] <= '9') {
+                res->timeout_ms *= 10;
+                res->timeout_ms += str[iter] - '0';
+                iter++;
+            }
+        } else {
+            print_error(iter, str);
+            return iter + 1;
         }
-    } else {
-        print_error(iter, str);
-        return iter + 1;
     }
-
     whitespaces(&iter, str);
 
     if(str[iter] == '\0') {
