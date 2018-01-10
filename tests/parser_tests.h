@@ -6,7 +6,7 @@ START_TEST(parser_wrong)
 {
     struct parse_result pr;
     int res = parse(&pr, "trash");
-    ck_assert_int_eq(res, 0);
+    ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -14,7 +14,7 @@ START_TEST(parser_empty)
 {
     struct parse_result pr;
     int res = parse(&pr, "");
-    ck_assert_int_eq(res, 0);
+    ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -22,7 +22,7 @@ START_TEST(parser_bracket_error)
 {
     struct parse_result pr;
     int res = parse(&pr, "input  d");
-    ck_assert_int_eq(res, 7);
+    ck_assert_int_eq(res, 8);
 }
 END_TEST
 
@@ -41,6 +41,7 @@ START_TEST(parser_node_2)
     struct node n;
     int i = 0;
     int r = parse_node(&n, &i, ">= 123");
+    ck_assert_int_eq(r, 0);
     ck_assert_int_eq(n.int_value, 123);
     ck_assert_int_eq(n.matcher, GREATER_OR_EQUAL);
 }
@@ -114,7 +115,7 @@ START_TEST(parser_too_many_tuples)
 {
     struct parse_result pr;
     int res = parse(&pr, "read(1,1,1,1,1,1)");
-    ck_assert_int_eq(res, 14);
+    ck_assert_int_eq(res, 15);
 }
 END_TEST
 

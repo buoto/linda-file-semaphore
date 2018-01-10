@@ -6,13 +6,6 @@ void whitespaces(int *iter, const char* str) {
     }
 }
 
-void print_error(int iter, const char* str) {
-    printf("error: %s\n      ", str);
-    for(int i = 0; i <= iter; i++)
-        printf(" ");
-    printf("^\n");
-}
-
 int parse_node(struct node *n, int *iter, const char *str) {
     n->matcher = EQUAL;
 
@@ -135,19 +128,27 @@ int parse(struct parse_result *res, char *str) {
             strcpy(word, "read");
             res->operation = READ;
             break;
+        case 'e':
+            strcpy(word, "exit");
+            res->operation = EXIT;
+            break;
+        default:
+            return iter + 1;
     }
 
     if(strncmp(str + iter, word, strlen(word)) != 0) {
-        print_error(iter, str);
-        return iter;
+        return iter + 1;
     }
 
     iter+= strlen(word);
     res->tuple = make_tuple();
 
+    if(res->operation == EXIT) {
+        return 0;
+    }
+
     if(parse_tuple(&res->tuple, str, &iter) != 0) {
-        print_error(iter, str);
-        return iter;
+        return iter + 1;
     };
 
     if(res->operation != OUTPUT) {
@@ -161,7 +162,6 @@ int parse(struct parse_result *res, char *str) {
                 iter++;
             }
         } else {
-            print_error(iter, str);
             return iter + 1;
         }
     }
@@ -170,8 +170,7 @@ int parse(struct parse_result *res, char *str) {
     if(str[iter] == '\0') {
         return 0;
     } else {
-        print_error(iter, str);
-        return iter;
+        return iter + 1;
     }
 }
 
@@ -179,14 +178,12 @@ int deserialize_tuple(struct tuple *t, const char *str) {
     int iter = 0;
 
     if(parse_tuple(t, str, &iter) != 0) {
-        print_error(iter, str);
-        return iter;
+        return iter + 1;
     };
 
     if(str[iter] == '\n' || str[iter] == '\0') {
         return 0;
     } else {
-        print_error(iter, str);
-        return iter;
+        return iter + 1;
     }
 }

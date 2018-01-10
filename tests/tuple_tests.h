@@ -72,7 +72,7 @@ struct tuple_length_case {
     struct tuple value;
     size_t expected;
 } tuple_length_cases[] = {
-    {{ 0, { } }, 2},
+    {{ 0 }, 2},
     {{ 1, { NODE_I(1) } }, 3},
     {{ 2, { NODE_I(1), NODE_I(1) } }, 5},
     {{ 3, { NODE_I(1), NODE_S("add"), NODE_I(3333) } }, 14},
@@ -90,7 +90,7 @@ struct tuple_serialize_case {
     struct tuple value;
     const char* expected;
 } tuple_serialize_cases[] = {
-    {{ 0, { } }, "()"},
+    {{ 0 }, "()"},
     {{ 1, { NODE_I(444) } }, "(444)"},
     {{ 1, { NODE_S("asd") } }, "(\"asd\")"},
     {{ 2, { NODE_S("asd"), NODE_I(444) } }, "(\"asd\",444)"},
