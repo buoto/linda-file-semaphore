@@ -67,7 +67,7 @@ size_t tuple_serialize(const struct tuple *t, char *out, size_t length) {
         switch(n.type) {
             case STRING:
                 out[iter++] = '"';
-                result = strncpy(out + iter, n.str_value, n_len);
+                strncpy(out + iter, n.str_value, n_len);
                 iter += n_len;
                 out[iter++] = '"';
                 break;
