@@ -24,6 +24,7 @@ int main(void)
     tcase_add_test(tc, node_destroy_string);
     tcase_add_loop_test(tc, node_match_pattern, 0, N_PATTERN_CASES);
     tcase_add_loop_test(tc, node_match_node, 0, N_NODE_CASES);
+    tcase_add_loop_test(tc, node_length_test, 0, N_LENGTH_CASES);
 
     tcase_add_test(tc, tuple_make);
     tcase_add_test(tc, tuple_append_one);

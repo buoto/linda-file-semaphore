@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 
 #define NODE_I(V) { .type = INTEGER, .int_value = V, .matcher = EQUAL }
 #define NODE_IM(V, M) { .type = INTEGER, .int_value = V, .matcher = M }
@@ -41,5 +42,7 @@ bool match_string(
     const char *pattern,
     const char *value
 );
+
+size_t node_length(const struct node n);
 
 #endif /* end of include guard: NODE_H */
