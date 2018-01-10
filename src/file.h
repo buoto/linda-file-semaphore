@@ -25,6 +25,7 @@ struct file {
 struct file make_linda_file(char *path, size_t size);
 
 int timed_lock(struct file *f, unsigned timeout_ms);
+int lock(struct file *f);
 int unlock(struct file *f);
 
 int read_store_file(struct file *f, struct store *s);

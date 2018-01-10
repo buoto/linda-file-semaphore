@@ -32,6 +32,13 @@ int timed_lock(struct file *f, unsigned timeout_ms) {
     return sem_timedwait(f->sem, &ts);
 }
 
+int lock(struct file *f) {
+    if(f == NULL || f->sem == NULL) {
+        return -1;
+    }
+    return sem_wait(f->sem);
+}
+
 int unlock(struct file *f) {
     if(f == NULL || f->sem == NULL) {
         return -1;
