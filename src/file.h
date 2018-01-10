@@ -10,6 +10,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <semaphore.h>
+#include <time.h>
 
 #include "tuple.h"
 #include "store.h"
@@ -24,7 +25,7 @@ struct file {
 
 struct file make_linda_file(char *path, size_t size);
 
-int timed_lock(struct file *f, unsigned timeout_ms);
+int timed_lock(struct file *f, const struct timespec *ts);
 int lock(struct file *f);
 int unlock(struct file *f);
 

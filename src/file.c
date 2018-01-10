@@ -21,15 +21,11 @@ struct file make_linda_file(char *path, size_t size) {
     };
 }
 
-int timed_lock(struct file *f, unsigned timeout_ms) {
+int timed_lock(struct file *f, const struct timespec *ts) {
     if(f == NULL || f->sem == NULL) {
         return -1;
     }
-    const struct timespec ts = {
-        .tv_sec = timeout_ms/1000,
-        .tv_nsec = (timeout_ms % 1000) * 1000000,
-    };
-    return sem_timedwait(f->sem, &ts);
+    return sem_timedwait(f->sem, ts);
 }
 
 int lock(struct file *f) {
