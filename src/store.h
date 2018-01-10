@@ -15,7 +15,7 @@ void store_append(struct store *s, struct tuple t);
 
 typedef bool (*tuple_comparer)(const struct tuple*, const struct tuple*); // TODO move to tuple
 struct tuple* find_in_store(const struct store *s, const struct tuple pattern, tuple_comparer f);
-struct tuple* pop_in_store(struct store *s, const struct tuple pattern, tuple_comparer f);
+struct tuple pop_in_store(struct store *s, const struct tuple pattern, tuple_comparer f);
 
 int fprintf_store(const struct store *s, FILE* stream);
 

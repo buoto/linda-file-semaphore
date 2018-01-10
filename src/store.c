@@ -48,13 +48,13 @@ struct tuple* find_in_store(
     return NULL;
 }
 
-struct tuple* pop_in_store(
+struct tuple pop_in_store(
         struct store *s,
         const struct tuple pattern,
         tuple_comparer f
 ) {
     if(s == NULL) {
-        return NULL;
+        return (struct tuple){0};
     }
     struct store_node *cur = s->first, *prev = NULL;
 
@@ -65,13 +65,15 @@ struct tuple* pop_in_store(
             } else {
                 prev->next = cur->next;
             }
-            return &(cur->element); // mmr lik hr
+            struct tuple deleted = cur->element;
+            free(cur);
+            return deleted;
         }
 
         prev = cur;
         cur = cur->next;
     }
-    return NULL;
+    return (struct tuple){0};
 }
 
 int fprintf_store(const struct store *s, FILE* stream) {

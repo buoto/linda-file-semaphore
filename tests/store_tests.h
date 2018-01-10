@@ -95,9 +95,9 @@ START_TEST(store_pop)
     store_append(&s, (struct tuple) { 1, { NODE_I(2) } });
     store_append(&s, (struct tuple) { 1, { NODE_I(3) } });
 
-    struct tuple *result = pop_in_store(&s, pattern, match_tuple);
+    struct tuple result = pop_in_store(&s, pattern, match_tuple);
 
-    ck_assert_ptr_ne(result, NULL);
+    ck_assert_int_ne(result.size, 0);
     ck_assert_int_eq(s.first->element.elems[0].int_value, 1);
     ck_assert_int_eq(s.first->next->element.elems[0].int_value, 3);
     ck_assert_ptr_eq(s.first->next->next, NULL);
