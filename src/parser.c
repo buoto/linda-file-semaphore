@@ -1,19 +1,19 @@
 #include "parser.h"
 
-void whitespaces(int *iter, char* str) {
+void whitespaces(int *iter, const char* str) {
     while(str[*iter] == ' ') {
         (*iter)++;
     }
 }
 
-void print_error(int iter, char* str) {
+void print_error(int iter, const char* str) {
     printf("error: %s\n      ", str);
     for(int i = 0; i <= iter; i++)
         printf(" ");
     printf("^\n");
 }
 
-int parse_node(struct node *n, int *iter, char *str) {
+int parse_node(struct node *n, int *iter, const char *str) {
     n->matcher = EQUAL;
 
     if(str[*iter] == '<') {
@@ -78,7 +78,7 @@ int parse_node(struct node *n, int *iter, char *str) {
     return 0;
 }
 
-int parse_tuple(struct tuple *t, char *str, int *iter) {
+int parse_tuple(struct tuple *t, const char *str, int *iter) {
 
     whitespaces(iter, str);
     if(str[*iter] != '(') {
@@ -175,7 +175,7 @@ int parse(struct parse_result *res, char *str) {
     }
 }
 
-int deserialize_tuple(struct tuple *t, char *str) {
+int deserialize_tuple(struct tuple *t, const char *str) {
     int iter = 0;
 
     if(parse_tuple(t, str, &iter) != 0) {
@@ -183,7 +183,7 @@ int deserialize_tuple(struct tuple *t, char *str) {
         return iter;
     };
 
-    if(str[iter] == '\0') {
+    if(str[iter] == '\n' || str[iter] == '\0') {
         return 0;
     } else {
         print_error(iter, str);

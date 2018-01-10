@@ -12,6 +12,8 @@ struct parse_result {
 };
 
 int parse(struct parse_result *res, char *user_input);
-int parse_node(struct node *n, int *iter, char *str);
+int parse_node(struct node *n, int *iter, const char *str);
+
+int deserialize_tuple(struct tuple *t, const char *str);
 
 #endif

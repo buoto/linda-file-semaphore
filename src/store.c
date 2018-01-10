@@ -82,16 +82,16 @@ int fprintf_store(const struct store *s, FILE* stream) {
     struct store_node *cur = s->first;
 
     while(cur != NULL) {
-        // TODO serialize tuple
         size_t length = tuple_length(&cur->element);
         char *buf = (char*) malloc(length + 1);
 
-        int result = -1; //tuple_serialize(cur->element, buf, length);
+        int result = tuple_serialize(&cur->element, buf, length);
 
         if(result < 0 ) {
             return result;
         }
-        buf[length] = 0;
+
+        fprintf(stream, "%s\n", buf);
 
         cur = cur->next;
     }

@@ -52,7 +52,8 @@ int read_store_file(struct file *f, struct store *s) {
     size_t len = 0;
     ssize_t nread = 0;
     while ((nread = getline(&line, &len, fd)) != -1) {
-        struct tuple t = { 2, { NODE_I(1), NODE_I(3) } }; // TODO deserialize tuple here
+        struct tuple t = make_tuple();
+        deserialize_tuple(&t, line);
         append_store(s, t);
     }
 

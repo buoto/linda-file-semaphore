@@ -13,6 +13,7 @@
 
 #include "tuple.h"
 #include "store.h"
+#include "parser.h"
 
 #define MAX_LINE_SIZE 1024
 
