@@ -142,3 +142,13 @@ bool match_pattern(const char *pattern, const char *value) {
         }
     }
 }
+
+size_t node_length(const struct node n) {
+    switch (n.type) {
+        case INTEGER:
+            return floor(log10(abs(n.int_value))) + 1;
+        case STRING:
+            return strlen(n.str_value);
+    }
+    return 0;
+}

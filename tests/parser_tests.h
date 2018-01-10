@@ -101,6 +101,17 @@ START_TEST(parser_multiple_tuples_2)
 }
 END_TEST
 
+START_TEST(parser_tuple_no_timeout_provided)
+{
+    struct parse_result pr;
+    int res = parse(&pr, "input()");
+    ck_assert_int_eq(res, 8);
+    ck_assert_int_eq(pr.tuple.size, 0);
+    ck_assert_int_eq(pr.operation, INPUT);
+    ck_assert_int_eq(pr.timeout_ms, 0);
+}
+END_TEST
+
 START_TEST(parser_too_many_tuples)
 {
     struct parse_result pr;

@@ -105,3 +105,21 @@ START_TEST(node_match_pattern)
     ck_assert_int_eq(result, match_pattern_cases[_i].expected);
 }
 END_TEST
+
+
+struct node_length_case {
+    struct node value;
+    size_t expected;
+} node_length_cases[] = {
+    { NODE_I(123),  3 },
+    { NODE_I(3),  1 },
+    { NODE_S("abc"), 3 },
+    { NODE_S("abaac"), 5 },
+};
+const int N_LENGTH_CASES = sizeof(node_length_cases) / sizeof(struct node_length_case);
+START_TEST(node_length_test)
+{
+    int result = node_length(node_length_cases[_i].value);
+    ck_assert_int_eq(result, node_length_cases[_i].expected);
+}
+END_TEST
