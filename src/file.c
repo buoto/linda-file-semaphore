@@ -12,9 +12,12 @@ struct file make_linda_file(char *path, size_t size) {
     strncpy(sem_path, path, size);
     strncpy(sem_path + size - 1, SEM_PATH_PREFIX, sizeof(SEM_PATH_PREFIX));
 
+    sem_t *sem = sem_open(sem_path, O_CREAT, 0700, 1);
+    free(sem_path);
+
     return (struct file) {
         .path = value,
-        .sem = sem_open(sem_path, O_CREAT, 0700, 1), // TODO handle error
+        .sem = sem,
     };
 }
 
@@ -81,11 +84,14 @@ int write_store_file(struct file *f, struct store *s) {
 }
 
 void destroy_file(struct file *f) {
-    if(f == NULL || f->sem) {
+    if(f == NULL) {
         return;
     }
+    free(f->path);
+    f->path = NULL;
 
-    sem_close(f->sem);
-
-    f->sem = NULL;
+    if (f->sem != NULL) {
+        sem_close(f->sem);
+        f->sem = NULL;
+    }
 }
