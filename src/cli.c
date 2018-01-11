@@ -58,7 +58,7 @@ void run_read_command(
     unsigned timeout_ms
 ) {
     struct tuple output;
-    int result = linda_read(tuple, &output, timeout_ms);
+    int result = linda_read(linda, tuple, &output, timeout_ms);
     if(result != 0) {
         printf("Operation timed out.\n");
     } else {
@@ -74,7 +74,7 @@ void run_input_command(
     unsigned timeout_ms
 ) {
     struct tuple output;
-    int result = linda_input(tuple, &output, timeout_ms);
+    int result = linda_input(linda, tuple, &output, timeout_ms);
     if(result != 0) {
         printf("Operation timed out.\n");
     } else {
@@ -88,7 +88,7 @@ void run_output_command(
     const struct linda *linda,
     const struct tuple *tuple
 ) {
-    int result = linda_output(tuple);
+    int result = linda_output(linda, tuple);
     if(result != 0) {
         printf("Operation failed.\n");
     } else {
