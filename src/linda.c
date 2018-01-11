@@ -76,7 +76,7 @@ int linda_input(
     struct timespec deadline = add_ms(&start, timeout_ms); // deadline
 
     while(1) {
-        if(sem_timedwait(l->reader_mutex, &deadline)) { // wait(reader_mutex)
+        if(sem_timedwait(l->reader_mutex, &deadline) < 0) { // wait(reader_mutex)
             return errno; // error or timeout - abort
         }
         // reader_mutex PROTECTED
@@ -113,12 +113,12 @@ int linda_input(
         unlock(linda_file); // runlock
         // file_lock END
 
-        if(sem_timedwait(l->notify, &deadline)) { // wait(notify)
+        if(sem_timedwait(l->notify, &deadline) < 0) { // wait(notify)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
 
-        if(sem_timedwait(l->reader_mutex, &deadline)) { // wait(reader_mutex)
+        if(sem_timedwait(l->reader_mutex, &deadline) < 0) { // wait(reader_mutex)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
@@ -149,7 +149,7 @@ int linda_input(
             sem_post(l->reader_mutex); // return the mutex
             // reader_mutex END2
 
-            if(sem_timedwait(l->done_reading, &deadline)) { // wait for the others
+            if(sem_timedwait(l->done_reading, &deadline) < 0) { // wait for the others
                 return errno;
             }
         }
@@ -177,7 +177,7 @@ int linda_read(
     struct timespec deadline = add_ms(&start, timeout_ms); // deadline
 
     while(1) {
-        if(sem_timedwait(l->reader_mutex, &deadline)) { // wait(reader_mutex)
+        if(sem_timedwait(l->reader_mutex, &deadline) < 0) { // wait(reader_mutex)
             return errno; // error or timeout - abort
         }
         // reader_mutex PROTECTED
@@ -211,12 +211,12 @@ int linda_read(
             return 0;
         }
 
-        if(sem_timedwait(l->notify, &deadline)) { // wait(notify)
+        if(sem_timedwait(l->notify, &deadline) < 0) { // wait(notify)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
 
-        if(sem_timedwait(l->reader_mutex, &deadline)) { // wait(reader_mutex)
+        if(sem_timedwait(l->reader_mutex, &deadline) < 0) { // wait(reader_mutex)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
@@ -247,7 +247,7 @@ int linda_read(
             sem_post(l->reader_mutex); // return the mutex
             // reader_mutex END2
 
-            if(sem_timedwait(l->done_reading, &deadline)) { // wait for the others
+            if(sem_timedwait(l->done_reading, &deadline) < 0) { // wait for the others
                 return errno;
             }
         }
