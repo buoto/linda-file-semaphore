@@ -73,7 +73,7 @@ struct tuple pop_in_store(
         prev = cur;
         cur = cur->next;
     }
-    return (struct tuple){0};
+    return (struct tuple){-1};
 }
 
 int fprintf_store(const struct store *s, FILE* stream) {
