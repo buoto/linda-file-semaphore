@@ -5,29 +5,28 @@
 #define NOTIFY_SEM_SUFFIX ".notify"
 #define READERS_COUNT_SEM_SUFFIX ".notify"
 
+char *make_name(const char *sem_base_path, const char *suffix) {
+    char *buf = (char*) malloc(strlen(sem_base_path) + strlen(suffix));
+    strcpy(buf, sem_base_path);
+    strcat(buf, suffix);
+    return buf;
+}
 
 struct linda *make_linda(const char *sem_base_path, struct file f) {
-    size_t path_len = strlen(sem_base_path);
-
     struct linda *l = (struct linda*) malloc(sizeof (struct linda));
     l->file = f;
 
-    char *buf = (char*) malloc(path_len + sizeof(READERS_COUNT_SEM_SUFFIX));
+    l->reader_mutex_name = make_name(sem_base_path, READER_SEM_SUFFIX);
+    l->reader_mutex = sem_open(l->reader_mutex_name, O_CREAT, 0700, 1);
 
-    strcpy(buf, sem_base_path);
-    strcat(buf, READER_SEM_SUFFIX);
-    l->reader_mutex = sem_open(buf, O_CREAT, 0700, 1);
+    l->done_reading_name = make_name(sem_base_path, DONE_READING_SEM_SUFFIX);
+    l->done_reading = sem_open(l->done_reading_name, O_CREAT, 0700, 1);
 
-    strcpy(buf + path_len - 1, DONE_READING_SEM_SUFFIX);
-    l->done_reading = sem_open(buf, O_CREAT, 0700, 0);
+    l->notify_name = make_name(sem_base_path, NOTIFY_SEM_SUFFIX);
+    l->notify = sem_open(l->notify_name, O_CREAT, 0700, 1);
 
-    strcpy(buf + path_len - 1, NOTIFY_SEM_SUFFIX);
-    l->notify = sem_open(buf, O_CREAT, 0700, 0);
-
-    strcpy(buf + path_len - 1, READERS_COUNT_SEM_SUFFIX);
-    l->readers_count = sem_open(buf, O_CREAT, 0700, 0);
-
-    free(buf);
+    l->readers_count_name = make_name(sem_base_path, READERS_COUNT_SEM_SUFFIX);
+    l->readers_count = sem_open(l->readers_count_name, O_CREAT, 0700, 1);
 
     return l;
 }
@@ -168,6 +167,11 @@ void destroy_linda(struct linda *l) {
     if(l == NULL) {
         return;
     }
+
+    free(l->reader_mutex_name);
+    free(l->done_reading_name);
+    free(l->notify_name);
+    free(l->readers_count_name);
 
     sem_close(l->reader_mutex);
     sem_close(l->done_reading);

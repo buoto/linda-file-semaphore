@@ -100,5 +100,9 @@ void run_output_command(
 }
 
 void cleanup(const struct linda *linda) {
-    printf("Cleaning up!\n");
+    sem_unlink(linda->reader_mutex_name);
+    sem_unlink(linda->done_reading_name);
+    sem_unlink(linda->notify_name);
+    sem_unlink(linda->readers_count_name);
+    // sem_unlink();
 }

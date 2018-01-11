@@ -20,6 +20,11 @@ struct linda {
     sem_t *readers_count;
 
     struct file file;
+
+    const char *reader_mutex_name;
+    const char *done_reading_name;
+    const char *notify_name;
+    const char *readers_count_name;
 };
 
 struct linda *make_linda(const char *sem_base_path, struct file f);
