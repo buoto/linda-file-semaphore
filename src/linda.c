@@ -100,7 +100,7 @@ int linda_read(
         timed_lock(linda_file, &deadline); // rlock
         // file_lock PROTECTED
         int err = read_store_file(linda_file, &s); // operate
-        unlock(linda_file); // runlock TODO expand critical
+        unlock(linda_file); // runlock
         // file_lock END
 
         if(err) {
