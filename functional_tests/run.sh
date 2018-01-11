@@ -2,7 +2,7 @@
 DIRECTORY=`dirname $0`
 EXEC=linda
 
-for i in {1..1}
+for i in {1..2}
 do
     ./$EXEC < $DIRECTORY/$i.in | diff $DIRECTORY/$i.out - &&
         echo "###### Test nr $i passed. ######" ||
