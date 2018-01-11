@@ -43,7 +43,7 @@ size_t tuple_length(const struct tuple *t) {
     }
 
     size_t length = BRACKET_LEN;
-    for(int i = 0; i < t->size; i++) {
+    for(unsigned i = 0; i < t->size; i++) {
         length += node_length(t->elems[i]);
 
         if(t->elems[i].type == STRING) {
@@ -59,7 +59,7 @@ size_t tuple_length(const struct tuple *t) {
 size_t tuple_serialize(const struct tuple *t, char *out, size_t length) {
     int iter = 0;
     out[iter++] = '(';
-    for(int i = 0; i < t->size; i++) {
+    for(unsigned i = 0; i < t->size; i++) {
         struct node n = t->elems[i];
         int n_len = node_length(n);
 
