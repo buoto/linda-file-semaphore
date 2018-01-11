@@ -132,6 +132,10 @@ int parse(struct parse_result *res, char *str) {
             strcpy(word, "exit");
             res->operation = EXIT;
             break;
+        case 'c':
+            strcpy(word, "cleanup");
+            res->operation = CLEANUP;
+            break;
         default:
             return iter + 1;
     }
@@ -143,7 +147,7 @@ int parse(struct parse_result *res, char *str) {
     iter+= strlen(word);
     res->tuple = make_tuple();
 
-    if(res->operation == EXIT) {
+    if(res->operation == EXIT || res->operation == CLEANUP) {
         return 0;
     }
 

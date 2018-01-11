@@ -3,7 +3,7 @@
 
 #include "tuple.h"
 
-enum operation { INPUT, OUTPUT, READ, EXIT };
+enum operation { INPUT, OUTPUT, READ, EXIT, CLEANUP };
 
 struct parse_result {
     enum operation operation;

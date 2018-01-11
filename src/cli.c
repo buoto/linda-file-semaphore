@@ -48,6 +48,9 @@ int run_command(
             break;
         case EXIT:
             return 1;
+        case CLEANUP:
+            cleanup(linda);
+            return 1;
     }
     return 0;
 }
@@ -94,4 +97,8 @@ void run_output_command(
     } else {
         printf("Operation successful.\n");
     }
+}
+
+void cleanup(const struct linda *linda) {
+    printf("Cleaning up!\n");
 }

@@ -32,5 +32,6 @@ void run_output_command(
     const struct tuple *tuple
 );
 void print_error(int iter, const char* str);
+void cleanup(const struct linda *linda);
 
 #endif
