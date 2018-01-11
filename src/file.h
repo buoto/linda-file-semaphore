@@ -18,6 +18,8 @@
 
 #define MAX_LINE_SIZE 1024
 
+#define SEM_PATH_SUFFIX ".sem"
+
 struct file {
     char *path;
     sem_t *sem;

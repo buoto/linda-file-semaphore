@@ -1,16 +1,14 @@
 #include "file.h"
 
-#define SEM_PATH_PREFIX ".sem"
-
 struct file make_linda_file(char *path, size_t size) {
     char* value = (char*) malloc(sizeof(char) * size);
     strncpy(value, path, size);
 
     char* sem_path = (char*) malloc(
-        sizeof(char) * (size + sizeof(SEM_PATH_PREFIX))
+        sizeof(char) * (size + sizeof(SEM_PATH_SUFFIX))
     );
     strncpy(sem_path, path, size);
-    strncpy(sem_path + size - 1, SEM_PATH_PREFIX, sizeof(SEM_PATH_PREFIX));
+    strncpy(sem_path + size - 1, SEM_PATH_SUFFIX, sizeof(SEM_PATH_SUFFIX));
 
     sem_t *sem = sem_open(sem_path, O_CREAT, 0700, 1);
     free(sem_path);

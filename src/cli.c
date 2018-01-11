@@ -104,5 +104,9 @@ void cleanup(const struct linda *linda) {
     sem_unlink(linda->done_reading_name);
     sem_unlink(linda->notify_name);
     sem_unlink(linda->readers_count_name);
-    // sem_unlink();
+
+    char sem_name[1024];
+    strcpy(sem_name, linda->file.path);
+    strcat(sem_name, SEM_PATH_SUFFIX);
+    sem_unlink(sem_name);
 }
