@@ -87,8 +87,7 @@ int linda_read(
     struct timespec deadline = add_ms(&start, timeout_ms); // deadline
 
     while(1) {
-        int err = sem_timedwait(l->reader_mutex, &deadline); // wait(reader_mutex)
-        if(err) {
+        if(sem_timedwait(l->reader_mutex, &deadline)) { // wait(reader_mutex)
             return errno; // error or timeout - abort
         }
         // reader_mutex PROTECTED
@@ -100,8 +99,8 @@ int linda_read(
 
         timed_lock(linda_file, &deadline); // rlock
         // file_lock PROTECTED
-        err = read_store_file(linda_file, &s); // operate
-        unlock(linda_file); // runlock
+        int err = read_store_file(linda_file, &s); // operate
+        unlock(linda_file); // runlock TODO expand critical
         // file_lock END
 
         if(err) {
@@ -122,22 +121,19 @@ int linda_read(
             return 0;
         }
 
-        err = sem_timedwait(l->notify, &deadline); // wait(notify)
-        if(err) {
+        if(sem_timedwait(l->notify, &deadline)) { // wait(notify)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
 
-        err = sem_timedwait(l->reader_mutex, &deadline); // wait(reader_mutex)
-        if(err) {
+        if(sem_timedwait(l->reader_mutex, &deadline)) { // wait(reader_mutex)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
         // reader_mutex PROTECTED
         sem_trywait(l->readers_count); // readers_count--
 
-        err = sem_trywait(l->readers_count); // readers_count == 0 ?
-        if(err) {
+        if(sem_trywait(l->readers_count)) { // readers_count == 0 ?
             if(errno != EAGAIN) {
                 // something really bad happened
                 sem_post(l->reader_mutex);
@@ -161,8 +157,7 @@ int linda_read(
             sem_post(l->reader_mutex); // return the mutex
             // reader_mutex END2
 
-            err = sem_timedwait(l->done_reading, &deadline); // wait for the others
-            if(err) {
+            if(sem_timedwait(l->done_reading, &deadline)) { // wait for the others
                 return errno;
             }
         }
