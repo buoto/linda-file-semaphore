@@ -89,8 +89,6 @@ int linda_input(
         timed_lock(linda_file, &deadline); // rlock
         // file_lock PROTECTED
         int err = read_store_file(linda_file, &s); // operate
-        unlock(linda_file); // runlock
-        // file_lock END
 
         if(err) {
             /* Wrapping below trywait in mutex is unnecessary, because process can
@@ -100,15 +98,20 @@ int linda_input(
             return err; // errors from read_store_file
         }
 
-        struct tuple *target_tuple = find_in_store(&s, *pattern, match_tuple);
-        destroy_store(&s);
+        struct tuple target_tuple = pop_in_store(&s, *pattern, match_tuple);
 
-        if(target_tuple != NULL) {
+        if(target_tuple.size != -1) {
             // SUCCESS - tuple is found
+            write_store_file(&l->file, &s);
+            destroy_store(&s);
             sem_trywait(l->readers_count); // prompt decrement
-            *output = *target_tuple;
+            *output = target_tuple;
             return 0;
         }
+        destroy_store(&s);
+
+        unlock(linda_file); // runlock
+        // file_lock END
 
         if(sem_timedwait(l->notify, &deadline)) { // wait(notify)
             sem_trywait(l->readers_count); // prompt decrement

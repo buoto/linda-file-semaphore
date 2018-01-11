@@ -54,7 +54,7 @@ struct tuple pop_in_store(
         tuple_comparer f
 ) {
     if(s == NULL) {
-        return (struct tuple){0};
+        return (struct tuple){-1};
     }
     struct store_node *cur = s->first, *prev = NULL;
 
