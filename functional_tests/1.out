@@ -1,0 +1,7 @@
+Welcome to multiprocess linda system.
+Type 'exit' to quit.
+> Operation successful.
+> Operation successful.
+> Result: ("asd",1,"b")
+> Result: (1,2,3)
+> Goodbye :)

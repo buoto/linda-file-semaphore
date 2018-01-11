@@ -6,6 +6,7 @@ TESTFLAGS=`pkg-config --libs --cflags check`
 SRCDIR=src
 OBJDIR=obj
 TESTDIR=tests
+FTESTEXEC=functional_tests/run.sh
 
 EXEC=linda
 TESTEXEC=$(EXEC)_test
@@ -23,6 +24,9 @@ run: $(EXEC)
 
 debug: $(EXEC)
 	gdb $(EXEC)
+
+functional_test: $(EXEC)
+	./$(FTESTEXEC)
 
 $(EXEC): $(OBJDIR) $(MAINOBJ) $(OBJ) $(SRCHEADERS)
 	$(CC) $(LDFLAGS) -o $(EXEC) $(MAINOBJ) $(OBJ)
