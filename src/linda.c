@@ -46,7 +46,8 @@ int linda_output(const struct linda *l, const struct tuple* value) {
 
     sem_trywait(l->notify);
     while (errno == EAGAIN) {
-        sem_post(l->notify);
+        sem_post(l->notify); // one for me
+        sem_post(l->notify); // one for my reader
         errno = 0;
         sem_trywait(l->notify);
     }
@@ -103,6 +104,7 @@ int linda_input(
         if(target_tuple.size != -1) {
             // SUCCESS - tuple is found
             write_store_file(&l->file, &s);
+            unlock(linda_file); // runlock
             destroy_store(&s);
             sem_trywait(l->readers_count); // prompt decrement
             *output = target_tuple;
