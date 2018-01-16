@@ -13,6 +13,7 @@ TESTEXEC=$(EXEC)_test
 
 SRC=tuple.c node.c linda.c cli.c parser.c file.c store.c time_utils.c
 OBJ=$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
+HEADERS=$(addprefix $(SRCDIR)/,$(SRC:.c=.h))
 MAINOBJ=$(OBJDIR)/main.o
 
 .PHONY: all clean run debug test FORCE
@@ -31,10 +32,8 @@ functional_test: $(EXEC)
 $(EXEC): $(OBJDIR) $(MAINOBJ) $(OBJ) $(SRCHEADERS)
 	$(CC) $(LDFLAGS) -o $(EXEC) $(MAINOBJ) $(OBJ)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(HEADERS)
 	$(CC) -c $(CFLAGS) $< -o $@
-
-$(MAINOBJ): FORCE
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)

@@ -9,6 +9,7 @@
 #include <time.h>
 
 #include "file.h"
+#include "debug.h"
 #include "tuple.h"
 #include "store.h"
 #include "time_utils.h"

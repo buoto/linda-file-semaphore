@@ -3,7 +3,7 @@
 #define READER_SEM_SUFFIX ".reader"
 #define DONE_READING_SEM_SUFFIX ".done_reading"
 #define NOTIFY_SEM_SUFFIX ".notify"
-#define READERS_COUNT_SEM_SUFFIX ".notify"
+#define READERS_COUNT_SEM_SUFFIX ".readers_count"
 
 char *make_name(const char *sem_base_path, const char *suffix) {
     char *buf = (char*) malloc(strlen(sem_base_path) + strlen(suffix));
@@ -20,13 +20,13 @@ struct linda *make_linda(const char *sem_base_path, struct file f) {
     l->reader_mutex = sem_open(l->reader_mutex_name, O_CREAT, 0700, 1);
 
     l->done_reading_name = make_name(sem_base_path, DONE_READING_SEM_SUFFIX);
-    l->done_reading = sem_open(l->done_reading_name, O_CREAT, 0700, 1);
+    l->done_reading = sem_open(l->done_reading_name, O_CREAT, 0700, 0);
 
     l->notify_name = make_name(sem_base_path, NOTIFY_SEM_SUFFIX);
-    l->notify = sem_open(l->notify_name, O_CREAT, 0700, 1);
+    l->notify = sem_open(l->notify_name, O_CREAT, 0700, 0);
 
     l->readers_count_name = make_name(sem_base_path, READERS_COUNT_SEM_SUFFIX);
-    l->readers_count = sem_open(l->readers_count_name, O_CREAT, 0700, 1);
+    l->readers_count = sem_open(l->readers_count_name, O_CREAT, 0700, 0);
 
     return l;
 }
@@ -113,7 +113,8 @@ int linda_input(
         unlock(linda_file); // runlock
         // file_lock END
 
-        if(sem_timedwait(l->notify, &deadline) < 0) { // wait(notify)
+        err = sem_timedwait(l->notify, &deadline);
+        if(err < 0) { // wait(notify)
             sem_trywait(l->readers_count); // prompt decrement
             return errno;
         }
