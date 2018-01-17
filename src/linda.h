@@ -14,6 +14,8 @@
 #include "store.h"
 #include "time_utils.h"
 
+#include "debug.h"
+
 struct linda {
     sem_t *reader_mutex;
     sem_t *done_reading;

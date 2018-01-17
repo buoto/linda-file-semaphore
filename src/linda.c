@@ -44,12 +44,14 @@ int linda_output(const struct linda *l, const struct tuple* value) {
 
     write_store_file(&(l->file), &s);
 
-    sem_trywait(l->notify);
-    while (errno == EAGAIN) {
+    while (sem_trywait(l->notify)) {
+        if (errno != EAGAIN) {
+            LOG("trywait != EAGAIN\n");
+            exit(1);
+        }
+        LOG("post notify\n");
         sem_post(l->notify); // one for me
         sem_post(l->notify); // one for my reader
-        errno = 0;
-        sem_trywait(l->notify);
     }
 
     unlock(&l->file);
@@ -159,6 +161,15 @@ int linda_input(
     }
 }
 
+struct timespec ms_from_now(unsigned timeout_ms) {
+    struct timespec start;
+    if(set_now(&start) == -1) {
+        LOG("cannot set time\n");
+        exit(1);
+    }
+    return add_ms(&start, timeout_ms);
+}
+
 int linda_read(
     const struct linda *l,
     const struct tuple* pattern,
@@ -171,13 +182,7 @@ int linda_read(
     }
 
     const struct file *linda_file = &(l->file);
-
-    // get start value
-    struct timespec start;
-    if(set_now(&start) == -1) {
-        return errno;
-    }
-    struct timespec deadline = add_ms(&start, timeout_ms); // deadline
+    struct timespec deadline = ms_from_now(timeout_ms);
 
     while(1) {
         if(sem_timedwait(l->reader_mutex, &deadline) < 0) { // wait(reader_mutex)
