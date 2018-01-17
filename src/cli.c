@@ -100,10 +100,9 @@ void run_output_command(
 }
 
 void cleanup(const struct linda *linda) {
-    sem_unlink(linda->reader_mutex_name);
-    sem_unlink(linda->done_reading_name);
+    sem_unlink(linda->waiting_guard_name);
+    sem_unlink(linda->waiting_name);
     sem_unlink(linda->notify_name);
-    sem_unlink(linda->readers_count_name);
 
     char sem_name[1024];
     strcpy(sem_name, linda->file.path);

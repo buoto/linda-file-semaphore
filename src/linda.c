@@ -1,9 +1,8 @@
 #include "linda.h"
 
-#define READER_SEM_SUFFIX ".reader"
-#define DONE_READING_SEM_SUFFIX ".done_reading"
+#define WAITING_GUARD_SEM_SUFFIX ".waiting_guard"
+#define WAITING_SEM_SUFFIX ".waiting"
 #define NOTIFY_SEM_SUFFIX ".notify"
-#define READERS_COUNT_SEM_SUFFIX ".readers_count"
 
 char *make_name(const char *sem_base_path, const char *suffix) {
     char *buf = (char*) malloc(strlen(sem_base_path) + strlen(suffix));
@@ -16,22 +15,38 @@ struct linda *make_linda(const char *sem_base_path, struct file f) {
     struct linda *l = (struct linda*) malloc(sizeof (struct linda));
     l->file = f;
 
-    l->reader_mutex_name = make_name(sem_base_path, READER_SEM_SUFFIX);
-    l->reader_mutex = sem_open(l->reader_mutex_name, O_CREAT, 0700, 1);
+    l->waiting_guard_name = make_name(sem_base_path, WAITING_GUARD_SEM_SUFFIX);
+    l->waiting_guard = sem_open(l->waiting_guard_name, O_CREAT, 0700, 1);
 
-    l->done_reading_name = make_name(sem_base_path, DONE_READING_SEM_SUFFIX);
-    l->done_reading = sem_open(l->done_reading_name, O_CREAT, 0700, 0);
+    l->waiting_name = make_name(sem_base_path, WAITING_SEM_SUFFIX);
+    l->waiting = sem_open(l->waiting_name, O_CREAT, 0700, 0);
 
     l->notify_name = make_name(sem_base_path, NOTIFY_SEM_SUFFIX);
     l->notify = sem_open(l->notify_name, O_CREAT, 0700, 0);
 
-    l->readers_count_name = make_name(sem_base_path, READERS_COUNT_SEM_SUFFIX);
-    l->readers_count = sem_open(l->readers_count_name, O_CREAT, 0700, 0);
-
     return l;
 }
 
-int linda_output(const struct linda *l, const struct tuple* value) {
+int wait_linda(const struct linda *l, const struct timespec *deadline) {
+    sem_wait(l->waiting_guard); {
+        sem_post(l->waiting);
+    } sem_post(l->waiting_guard);
+
+    return sem_timedwait(l->notify, deadline);
+}
+
+void broadcast_linda(const struct linda *l) {
+    sem_wait(l->waiting_guard); {
+        int value;
+        sem_getvalue(l->waiting, &value);
+        for(; value > 0; value--) {
+            sem_wait(l->waiting);
+            sem_post(l->notify);
+        }
+    } sem_post(l->waiting_guard);
+}
+
+int linda_output(const struct linda *l, const struct tuple *value) {
     if(l == NULL || value == NULL) {
         return -1;
     }
@@ -44,15 +59,7 @@ int linda_output(const struct linda *l, const struct tuple* value) {
 
     write_store_file(&(l->file), &s);
 
-    while (sem_trywait(l->notify)) {
-        if (errno != EAGAIN) {
-            LOG("trywait != EAGAIN\n");
-            exit(1);
-        }
-        LOG("post notify\n");
-        sem_post(l->notify); // one for me
-        sem_post(l->notify); // one for my reader
-    }
+    broadcast_linda(l);
 
     unlock(&l->file);
     return 0;
@@ -60,8 +67,8 @@ int linda_output(const struct linda *l, const struct tuple* value) {
 
 int linda_input(
     const struct linda *l,
-    const struct tuple* pattern,
-    struct tuple* output,
+    const struct tuple *pattern,
+    struct tuple *output,
     unsigned timeout_ms
 ) {
     // sanity checks
@@ -94,9 +101,9 @@ int linda_input(
         int err = read_store_file(linda_file, &s); // operate
 
         if(err) {
-            /* Wrapping below trywait in mutex is unnecessary, because process can
-             * either decrements what it has incremented or his increment was
-             * consumed by someone else and trywait does nothing */
+            / *Wrapping below trywait in mutex is unnecessary, because process can
+              *either decrements what it has incremented or his increment was
+              *consumed by someone else and trywait does nothing */
             sem_trywait(l->readers_count); // prompt decrement
             return err; // errors from read_store_file
         }
@@ -172,8 +179,8 @@ struct timespec ms_from_now(unsigned timeout_ms) {
 
 int linda_read(
     const struct linda *l,
-    const struct tuple* pattern,
-    struct tuple* output,
+    const struct tuple *pattern,
+    struct tuple *output,
     unsigned timeout_ms
 ) {
     // sanity checks
@@ -202,9 +209,9 @@ int linda_read(
         // file_lock END
 
         if(err) {
-            /* Wrapping below trywait in mutex is unnecessary, because process can
-             * either decrements what it has incremented or his increment was
-             * consumed by someone else and trywait does nothing */
+            / *Wrapping below trywait in mutex is unnecessary, because process can
+              *either decrements what it has incremented or his increment was
+              *consumed by someone else and trywait does nothing */
             sem_trywait(l->readers_count); // prompt decrement
             return err; // errors from read_store_file
         }
@@ -267,15 +274,13 @@ void destroy_linda(struct linda *l) {
         return;
     }
 
-    free(l->reader_mutex_name);
-    free(l->done_reading_name);
+    free(l->waiting_guard_name);
+    free(l->waiting_name);
     free(l->notify_name);
-    free(l->readers_count_name);
 
-    sem_close(l->reader_mutex);
-    sem_close(l->done_reading);
+    sem_close(l->waiting_guard);
+    sem_close(l->waiting);
     sem_close(l->notify);
-    sem_close(l->readers_count);
 
     free(l);
 }

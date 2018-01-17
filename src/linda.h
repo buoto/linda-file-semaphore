@@ -17,37 +17,38 @@
 #include "debug.h"
 
 struct linda {
-    sem_t *reader_mutex;
-    sem_t *done_reading;
     sem_t *notify;
-    sem_t *readers_count;
+    sem_t *waiting;
+    sem_t *waiting_guard;
 
     struct file file;
 
-    char *reader_mutex_name;
-    char *done_reading_name;
     char *notify_name;
-    char *readers_count_name;
+    char *waiting_name;
+    char *waiting_guard_name;
 };
 
 struct linda *make_linda(const char *sem_base_path, struct file f);
 
-int linda_output(const struct linda *l, const struct tuple* value);
+int wait_linda(const struct linda *l, const struct timespec *deadline);
+void broadcast_linda(const struct linda *l);
+
+int linda_output(const struct linda *l, const struct tuple *value);
 
 int linda_input(
     const struct linda *l,
-    const struct tuple* pattern,
-    struct tuple* output,
+    const struct tuple *pattern,
+    struct tuple *output,
     unsigned timeout_ms
 );
 
 int linda_read(
     const struct linda *l,
-    const struct tuple* pattern,
-    struct tuple* output,
+    const struct tuple *pattern,
+    struct tuple *output,
     unsigned timeout_ms
 );
 
 void destroy_linda(struct linda *l);
 
-#endif /* end of include guard: LINDA_H */
+#endif / *end of include guard: LINDA_H */
