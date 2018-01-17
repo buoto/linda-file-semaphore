@@ -51,4 +51,4 @@ int linda_read(
 
 void destroy_linda(struct linda *l);
 
-#endif / *end of include guard: LINDA_H */
+#endif
