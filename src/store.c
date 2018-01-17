@@ -54,7 +54,7 @@ struct tuple pop_in_store(
         tuple_comparer f
 ) {
     if(s == NULL) {
-        return (struct tuple){-1};
+        return (struct tuple){.size = -1};
     }
     struct store_node *cur = s->first, *prev = NULL;
 
@@ -73,7 +73,7 @@ struct tuple pop_in_store(
         prev = cur;
         cur = cur->next;
     }
-    return (struct tuple){-1};
+    return (struct tuple){.size = -1};
 }
 
 int fprintf_store(const struct store *s, FILE* stream) {

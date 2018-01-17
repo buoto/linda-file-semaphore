@@ -22,10 +22,10 @@ struct linda {
 
     struct file file;
 
-    const char *reader_mutex_name;
-    const char *done_reading_name;
-    const char *notify_name;
-    const char *readers_count_name;
+    char *reader_mutex_name;
+    char *done_reading_name;
+    char *notify_name;
+    char *readers_count_name;
 };
 
 struct linda *make_linda(const char *sem_base_path, struct file f);
