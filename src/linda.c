@@ -100,8 +100,8 @@ int linda_input(
 
             struct tuple target_tuple = pop_in_store(&s, *pattern, match_tuple);
             if(target_tuple.size != -1) {
-                unlock(linda_file);
                 write_store_file(&l->file, &s);
+                unlock(linda_file);
                 destroy_store(&s);
                 *output = target_tuple;
                 return 0;
