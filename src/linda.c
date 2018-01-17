@@ -110,7 +110,9 @@ int linda_input(
             destroy_store(&s);
         } unlock(linda_file);
 
-        wait_linda(l, &deadline);
+        if(wait_linda(l, &deadline)) {
+            return 1;
+        }
     }
 }
 
@@ -148,7 +150,9 @@ int linda_read(
             return 0;
         }
 
-        wait_linda(l, &deadline);
+        if(wait_linda(l, &deadline)) {
+            return 1;
+        }
     }
 }
 
